@@ -19,7 +19,7 @@ public class AuthProfile {
 //            user.setUserChoiceGoal(userChoiceGoal);
 
 private long id;
-private String userName;
+private String name;
 private String phone;
 private String userChoiceLevel;
 private String userChoiceGoal;

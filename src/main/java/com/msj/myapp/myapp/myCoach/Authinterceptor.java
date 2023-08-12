@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
 public class Authinterceptor implements HandlerInterceptor {
     @Autowired
     MyAppJWT myAppJwt;
-    @Override
+    @Override   //  WebMvcConfig에서 addInterceptors를 Override해서 사용
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
    throws Exception {
         System.out.println("요청 " + request);

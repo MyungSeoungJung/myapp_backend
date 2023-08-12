@@ -34,7 +34,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
 //    인증처리용 인터셉터를 추가
-    @Override
+    @Override  //인터셉터 오버라이드 +등록이 되어 있어야 함+
     public void addInterceptors(InterceptorRegistry registry){
         registry.addInterceptor(authinterceptor);
     }

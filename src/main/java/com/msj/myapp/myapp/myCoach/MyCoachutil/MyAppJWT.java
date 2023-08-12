@@ -23,7 +23,7 @@ public class MyAppJWT {
 
         return com.auth0.jwt.JWT.create()
                 .withSubject(String.valueOf(id))
-                .withClaim("userName",name)
+                .withClaim("name",name)
                 .withClaim("phone",phone)
                 .withClaim("userChoiceLevel",userChoiceLevel)
                 .withClaim("userChoiceGoal",userChoiceGoal)
@@ -45,8 +45,8 @@ public class MyAppJWT {
             Long id = Long.valueOf(decodedJWT.getSubject());
             String phone = decodedJWT
                     .getClaim("phone").asString();
-            String username = decodedJWT
-                    .getClaim("username").asString();
+            String name = decodedJWT
+                    .getClaim("name").asString();
             String userChoiceLevel = decodedJWT
                     .getClaim("userChoiceLevel").asString();
             String userChoiceGoal = decodedJWT
@@ -54,7 +54,7 @@ public class MyAppJWT {
 
             return AuthProfile.builder()
                     .id(id)
-                    .userName(username)
+                    .name(name)
                     .phone(phone)
                     .userChoiceGoal(userChoiceGoal)
                     .userChoiceLevel(userChoiceLevel)
