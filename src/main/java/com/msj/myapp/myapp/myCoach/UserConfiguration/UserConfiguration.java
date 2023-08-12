@@ -2,7 +2,7 @@ package com.msj.myapp.myapp.myCoach.UserConfiguration;
 
 
 import com.msj.myapp.myapp.myCoach.MyCoachutil.Hash;
-import com.msj.myapp.myapp.myCoach.MyCoachutil.JWT;
+import com.msj.myapp.myapp.myCoach.MyCoachutil.MyAppJWT;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,7 +15,7 @@ public class UserConfiguration {
     }
 
     @Bean
-    public JWT jwt(){
-        return new JWT();
+    public MyAppJWT jwt(){
+        return new MyAppJWT();
     }
 }

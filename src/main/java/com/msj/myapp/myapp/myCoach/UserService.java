@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private UserRepository repo;
-    private ProgramRepository profileRepo;
+    private ProgramRepository programRepo;
 
     @Autowired
     Hash hash;
@@ -24,7 +24,7 @@ public class UserService {
     //데이터 베이스와 접촉하기 위해? 생성자는 객체를 초기화해주기 위해서인데 이해가 안감
     public UserService(UserRepository repo, ProgramRepository profileRepo){
         this.repo = repo;
-        this.profileRepo = profileRepo;
+        this.programRepo = programRepo;
     }
 
     @Transactional
@@ -50,7 +50,7 @@ public class UserService {
                         .programTitle(req.getProgramTitle())
                         .build();
 //        원래 프로그램ID값을 반환하는거였는ㄷ Name으로 바꿈 id값으로 바꿔서 키값으로 조회해서 객체로 반환하게 한다면?
-        String programName = profileRepo.save(toSaveProgram).getProgramTitle();
+        String programName = programRepo.save(toSaveProgram).getProgramTitle();
         savedUser.setProgramName(programName);  //user필드에 programName을 할당함
         repo.save(savedUser);
         return savedUser.getId();

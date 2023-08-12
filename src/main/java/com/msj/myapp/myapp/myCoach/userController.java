@@ -3,7 +3,7 @@ package com.msj.myapp.myapp.myCoach;
 
 
 import com.msj.myapp.myapp.myCoach.MyCoachutil.Hash;
-import com.msj.myapp.myapp.myCoach.MyCoachutil.JWT;
+import com.msj.myapp.myapp.myCoach.MyCoachutil.MyAppJWT;
 import com.msj.myapp.myapp.myCoach.entity.ProgramRepository;
 import com.msj.myapp.myapp.myCoach.entity.User;
 import com.msj.myapp.myapp.myCoach.entity.UserRepository;
@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -34,7 +36,9 @@ public class userController {
     private Hash hash;
 
     @Autowired
-    private JWT jwt;
+    private MyAppJWT myAppJwt;
+
+
 
     @PostMapping (value = "/signup")
     public ResponseEntity signup (@RequestBody signupRequest req){
@@ -69,7 +73,7 @@ public class userController {
 // 로그인 객체 반활할때 user가 선택한 program_name이 null이라면 js에서 알림창 뜨게 만들기
 //        ex if(response.program_name == null){
 //        alert 이런식으로 }
-        String token = jwt.createToken(
+        String token = myAppJwt.createToken(
                 user.getId(),
                 user.getName(),
                 user.getPhone(),
@@ -82,19 +86,35 @@ public class userController {
         //name속성 = token
         Cookie cookie = new Cookie("token", token);
         cookie.setPath("/");
-        cookie.setMaxAge((int) (jwt.TOKEN_TIMEOUT / 1000L)); // 만료시간
+        cookie.setMaxAge((int) (myAppJwt.TOKEN_TIMEOUT / 1000L)); // 만료시간
         cookie.setDomain("localhost"); // 쿠키를 사용할 수 있 도메인
 
         // 응답헤더에 쿠키 추가
         res.addCookie(cookie);
-
+        System.out.println(cookie);
         
         return ResponseEntity
                 .status(HttpStatus.FOUND)
                 .location(ServletUriComponentsBuilder
-                        .fromHttpUrl("http://localhost:5500/main.html")   //리다이렉트
+                        .fromHttpUrl("http://localhost:5500/mainpage/main.html")   //리다이렉트
                         .build().toUri())
                 .build();
+
     }
+
+    @Auth
+    @GetMapping (value = "main")   //Auth어노테이션 작동 토큰 가로채서 @RequestAttribute에 반환
+    public ResponseEntity<Object> mainpage (@RequestAttribute AuthProfile authProfile){
+        System.out.println("유저 정보" + authProfile);
+
+        Map<String, Object> res = new HashMap<>();
+        res.put("name",authProfile.getUserName());
+        res.put("phone",authProfile.getPhone());
+        res.put("userChoiceLevel",authProfile.getUserChoiceLevel());
+        res.put("userChoiceGoal",authProfile.getUserChoiceGoal());
+        return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
+
+
 
 }

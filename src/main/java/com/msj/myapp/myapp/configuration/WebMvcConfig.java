@@ -1,15 +1,18 @@
 package com.msj.myapp.myapp.configuration;
 
+import com.msj.myapp.myapp.myCoach.Authinterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
-//    @Autowired
-//    private Authinterceptor authinterceptor;
+    @Autowired
+    private Authinterceptor authinterceptor;
 
     // CORS(cross orgin resource sharing)
     // 다른 origin끼리 자원을 공유할 수 있게 하는 것
@@ -31,8 +34,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
 //    인증처리용 인터셉터를 추가
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry){
-//        registry.addInterceptor(authinterceptor);
-//    }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry){
+        registry.addInterceptor(authinterceptor);
+    }
 }
