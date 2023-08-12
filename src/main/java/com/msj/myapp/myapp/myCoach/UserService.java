@@ -45,13 +45,13 @@ public class UserService {
         System.out.println(req);
         User savedUser = repo.save(toSaveUser);
 
-        Program toSaveProgram =
-                Program.builder()
-                        .programTitle(req.getProgramTitle())
-                        .build();
-//        원래 프로그램ID값을 반환하는거였는ㄷ Name으로 바꿈 id값으로 바꿔서 키값으로 조회해서 객체로 반환하게 한다면?
-        String programName = programRepo.save(toSaveProgram).getProgramTitle();
-        savedUser.setProgramName(programName);  //user필드에 programName을 할당함
+//        Program toSaveProgram =
+//                Program.builder()
+//                        .programTitle(req.getProgramTitle())
+//                        .build();
+////        원래 프로그램ID값을 반환하는거였는ㄷ Name으로 바꿈 id값으로 바꿔서 키값으로 조회해서 객체로 반환하게 한다면?
+//        String programName = programRepo.save(toSaveProgram).getProgramTitle();
+//        savedUser.setProgramName(programName);  //user필드에 programName을 할당함
         repo.save(savedUser);
         return savedUser.getId();
     }
