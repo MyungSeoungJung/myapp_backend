@@ -27,12 +27,14 @@ public class User {
     private String userChoiceLevel;   //초급자 중급자 //상급자
     private Double activity; //활동량
     private String userChoiceGoal;    //다이어트 //근비대
-    private Double goalCal; //목표 칼로리 주 0.25감량 0.5감량 등
+    private int goalCal; //목표 칼로리 주 0.25감량 0.5감량 등
     @Column(length = 500)
     private String secret;
 
     //UserService에서 set받은 programName을 DB에 저장
     private String programName;
+
+
 
 
 }

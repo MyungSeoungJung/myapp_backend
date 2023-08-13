@@ -15,16 +15,22 @@ public class MyAppJWT {
     public String secret = "your-secret";
 
     public final int TOKEN_TIMEOUT = 1000 * 60 * 60 * 24* 7;
-
-    public String createToken(long id,String name,String phone,String userChoiceLevel,String userChoiceGoal){
+//  ------------------------------------------토큰생성
+    public String createToken(long id,String name,int weight,int height,int age,double Activity,
+                              int GoalCal,String ProgramName,String userChoiceLevel,String userChoiceGoal){
         Date now = new Date();
         Date exp = new Date(now.getTime() + TOKEN_TIMEOUT);
         Algorithm algorithm = Algorithm.HMAC256(secret);
-
+        //AuthProfile의 필드값하고 key값이 동일해야함  .withClaim("key",value)
         return com.auth0.jwt.JWT.create()
                 .withSubject(String.valueOf(id))
                 .withClaim("name",name)
-                .withClaim("phone",phone)
+                .withClaim("weight",weight)
+                .withClaim("height",height)
+                .withClaim("age",age)
+                .withClaim("activity",Activity)
+                .withClaim("goalCal",GoalCal)
+                .withClaim("programName",ProgramName)
                 .withClaim("userChoiceLevel",userChoiceLevel)
                 .withClaim("userChoiceGoal",userChoiceGoal)
                 .withIssuedAt(now)
@@ -33,6 +39,7 @@ public class MyAppJWT {
     }
 
 
+//   ----------------------------------------토큰 decoded
     public AuthProfile validateToken(String token) {
         Algorithm algorithm = Algorithm.HMAC256(secret);
         // 검증 객체 생성
@@ -43,10 +50,15 @@ public class MyAppJWT {
             // 토큰 검증 제대로 된 상황
             // 토큰 페이로드(데이터, subject/claim)를 조회
             Long id = Long.valueOf(decodedJWT.getSubject());
-            String phone = decodedJWT
-                    .getClaim("phone").asString();
             String name = decodedJWT
                     .getClaim("name").asString();
+            int weight = decodedJWT.getClaim("weight").asInt();
+            int height = decodedJWT.getClaim("height").asInt();
+            int age = decodedJWT.getClaim("age").asInt();
+            double activity = decodedJWT.getClaim("activity").asDouble();
+            int goalCal = decodedJWT.getClaim("goalCal").asInt();
+            String programName =decodedJWT
+                    .getClaim("programName").asString();
             String userChoiceLevel = decodedJWT
                     .getClaim("userChoiceLevel").asString();
             String userChoiceGoal = decodedJWT
@@ -55,7 +67,12 @@ public class MyAppJWT {
             return AuthProfile.builder()
                     .id(id)
                     .name(name)
-                    .phone(phone)
+                    .weight(weight)
+                    .height(height)
+                    .age(age)
+                    .activity(activity)
+                    .goalCal(goalCal)
+                    .programName(programName)
                     .userChoiceGoal(userChoiceGoal)
                     .userChoiceLevel(userChoiceLevel)
                     .build();

@@ -15,6 +15,7 @@ private String name;
     private String phone;
     private int height;
     private int weight;
+    private int goalCal;
     private String userChoiceLevel;   //초급자 중급자 //상급자
     private Double activity; // 활동량
     private String userChoiceGoal;    //다이어트 //근비대

@@ -35,6 +35,7 @@ public class UserService {
                 .sex(req.getSex())
                 .age(req.getAge())
                 .phone(req.getPhone())
+                .goalCal(req.getGoalCal())
                 .height(req.getHeight())
                 .weight(req.getWeight())
                 .userChoiceLevel(req.getUserChoiceLevel())

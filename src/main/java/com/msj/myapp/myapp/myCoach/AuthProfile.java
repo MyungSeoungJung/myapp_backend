@@ -20,7 +20,12 @@ public class AuthProfile {
 
 private long id;
 private String name;
-private String phone;
+private int weight;
+private int height;
+private int age;
+private double activity;
+private int goalCal;
+private String programName;
 private String userChoiceLevel;
 private String userChoiceGoal;
 }

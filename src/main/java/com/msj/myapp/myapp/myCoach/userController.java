@@ -4,6 +4,7 @@ package com.msj.myapp.myapp.myCoach;
 
 import com.msj.myapp.myapp.myCoach.MyCoachutil.Hash;
 import com.msj.myapp.myapp.myCoach.MyCoachutil.MyAppJWT;
+import com.msj.myapp.myapp.myCoach.entity.CaloricCalculator;
 import com.msj.myapp.myapp.myCoach.entity.ProgramRepository;
 import com.msj.myapp.myapp.myCoach.entity.User;
 import com.msj.myapp.myapp.myCoach.entity.UserRepository;
@@ -73,10 +74,16 @@ public class userController {
 // 로그인 객체 반활할때 user가 선택한 program_name이 null이라면 js에서 알림창 뜨게 만들기
 //        ex if(response.program_name == null){
 //        alert 이런식으로 }
+//        --------------------------------------------토큰생성
         String token = myAppJwt.createToken(
                 user.getId(),
                 user.getName(),
-                user.getPhone(),
+                user.getWeight(),
+                user.getHeight(),
+                user.getAge(),
+                user.getActivity(),
+                user.getGoalCal(),
+                user.getProgramName(),
                 user.getUserChoiceLevel(),
                 user.getUserChoiceGoal());
 
@@ -106,13 +113,20 @@ public class userController {
     @GetMapping (value = "main")   //Auth어노테이션 작동 토큰 가로채서 @RequestAttribute에 반환
     public ResponseEntity<Map<String,Object>> mainpage (@RequestAttribute AuthProfile authProfile){
         System.out.println("유저 정보" + authProfile);
-
+        //반환할 유저정보
         Map<String, Object> res = new HashMap<>();
         res.put("name",authProfile.getName());
-        res.put("phone",authProfile.getPhone());
+        res.put("weight",authProfile.getWeight());
+        res.put("height",authProfile.getHeight());
+        res.put("age",authProfile.getAge());
+        res.put("activity",authProfile.getActivity());
+        res.put("goalCal",authProfile.getGoalCal());
+        res.put("programName",authProfile.getProgramName());
         res.put("userChoiceLevel",authProfile.getUserChoiceLevel());
         res.put("userChoiceGoal",authProfile.getUserChoiceGoal());
 
+//        CaloricCalculator cal = new CaloricCalculator();
+//        cal.calculator();
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
