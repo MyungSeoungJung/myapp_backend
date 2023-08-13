@@ -115,7 +115,7 @@ public class userController {
     @Auth
     @GetMapping (value = "main")   //Auth어노테이션 작동 토큰 가로채서 @RequestAttribute에 반환
     public ResponseEntity<Map<String,Object>> mainpage (@RequestAttribute AuthProfile authProfile){
-        System.out.println("유저 정보" + authProfile);
+
         //반환할 유저정보
         Map<String, Object> res = new HashMap<>();
         res.put("name",authProfile.getName());
