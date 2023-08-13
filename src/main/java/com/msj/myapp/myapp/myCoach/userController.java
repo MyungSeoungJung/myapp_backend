@@ -59,7 +59,10 @@ public class userController {
 
         if (!findUser.isPresent()){  //유저 없으면
             // 유저 못 찾으면 401 에러
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "존재하지 않는 유저입니다."); // 에러 메시지 추가
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+
         }
         // 사용자가 입력한 패스워드를 해시화하여 데이터베이스에 저장된 해시와 비교
        boolean isVerified = hash.verifyHash(password,findUser.get().getSecret());
@@ -124,7 +127,6 @@ public class userController {
         res.put("programName",authProfile.getProgramName());
         res.put("userChoiceLevel",authProfile.getUserChoiceLevel());
         res.put("userChoiceGoal",authProfile.getUserChoiceGoal());
-        System.out.println(authProfile);
 //        CaloricCalculator cal = new CaloricCalculator();
 //        cal.calculator();
         return ResponseEntity.status(HttpStatus.OK).body(res);
