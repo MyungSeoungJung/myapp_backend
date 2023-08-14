@@ -4,6 +4,7 @@ package com.msj.myapp.myapp.myCoach;
 
 import com.msj.myapp.myapp.myCoach.MyCoachutil.Hash;
 import com.msj.myapp.myapp.myCoach.MyCoachutil.MyAppJWT;
+import com.msj.myapp.myapp.myCoach.entity.Program;
 import com.msj.myapp.myapp.myCoach.entity.ProgramRepository;
 import com.msj.myapp.myapp.myCoach.entity.User;
 import com.msj.myapp.myapp.myCoach.entity.UserRepository;
@@ -11,12 +12,14 @@ import com.msj.myapp.myapp.myCoach.request.signupRequest;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -131,6 +134,12 @@ public class userController {
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
+    @GetMapping (value = "recommendProgram")
+    public ResponseEntity<List<Program>> recommendProgram () {
+        List<Program> programs = programRepository.findAll(Sort.by("id").ascending());
+        return ResponseEntity.status(HttpStatus.OK).body(programs);
+
+    }
 
 
 }
