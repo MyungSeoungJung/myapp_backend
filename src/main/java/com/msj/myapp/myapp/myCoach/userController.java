@@ -127,8 +127,7 @@ public class userController {
         res.put("programName",authProfile.getProgramName());
         res.put("userChoiceLevel",authProfile.getUserChoiceLevel());
         res.put("userChoiceGoal",authProfile.getUserChoiceGoal());
-//        CaloricCalculator cal = new CaloricCalculator();
-//        cal.calculator();
+
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
