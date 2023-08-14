@@ -20,7 +20,6 @@ public class Authinterceptor implements HandlerInterceptor {
     @Override   //  WebMvcConfig에서 addInterceptors를 Override해서 사용
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
    throws Exception {
-        System.out.println("요청 " + request);
         // 1. 요청을 처리할 컨트롤 메서드에 @Auth 어노테이션이 있는지 확인
         // HTTP요청을 처리하는 메서드인지 확인
         if(handler instanceof HandlerMethod) {

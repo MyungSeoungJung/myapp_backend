@@ -4,7 +4,6 @@ package com.msj.myapp.myapp.myCoach;
 
 import com.msj.myapp.myapp.myCoach.MyCoachutil.Hash;
 import com.msj.myapp.myapp.myCoach.MyCoachutil.MyAppJWT;
-import com.msj.myapp.myapp.myCoach.entity.CaloricCalculator;
 import com.msj.myapp.myapp.myCoach.entity.ProgramRepository;
 import com.msj.myapp.myapp.myCoach.entity.User;
 import com.msj.myapp.myapp.myCoach.entity.UserRepository;
@@ -81,6 +80,7 @@ public class userController {
         String token = myAppJwt.createToken(
                 user.getId(),
                 user.getName(),
+                user.getSex(),
                 user.getWeight(),
                 user.getHeight(),
                 user.getAge(),
@@ -106,7 +106,7 @@ public class userController {
         return ResponseEntity
                 .status(HttpStatus.FOUND)
                 .location(ServletUriComponentsBuilder
-                        .fromHttpUrl("http://localhost:5500/mainpage/main.html")   //리다이렉트
+                        .fromHttpUrl("http://localhost:5500/main_page/main.html")   //리다이렉트
                         .build().toUri())
                 .build();
 
@@ -119,6 +119,7 @@ public class userController {
         //반환할 유저정보
         Map<String, Object> res = new HashMap<>();
         res.put("name",authProfile.getName());
+        res.put("sex",authProfile.getSex());
         res.put("weight",authProfile.getWeight());
         res.put("height",authProfile.getHeight());
         res.put("age",authProfile.getAge());
@@ -127,7 +128,6 @@ public class userController {
         res.put("programName",authProfile.getProgramName());
         res.put("userChoiceLevel",authProfile.getUserChoiceLevel());
         res.put("userChoiceGoal",authProfile.getUserChoiceGoal());
-
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 

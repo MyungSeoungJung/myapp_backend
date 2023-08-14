@@ -16,7 +16,7 @@ public class MyAppJWT {
 
     public final int TOKEN_TIMEOUT = 1000 * 60 * 60 * 24* 7;
 //  ------------------------------------------토큰생성
-    public String createToken(long id,String name,int weight,int height,int age,double Activity,
+    public String createToken(long id,String name,String sex,int weight,int height,int age,double Activity,
                               int GoalCal,String ProgramName,String userChoiceLevel,String userChoiceGoal){
         Date now = new Date();
         Date exp = new Date(now.getTime() + TOKEN_TIMEOUT);
@@ -25,6 +25,7 @@ public class MyAppJWT {
         return com.auth0.jwt.JWT.create()
                 .withSubject(String.valueOf(id))
                 .withClaim("name",name)
+                .withClaim("sex",sex)
                 .withClaim("weight",weight)
                 .withClaim("height",height)
                 .withClaim("age",age)
@@ -52,6 +53,8 @@ public class MyAppJWT {
             Long id = Long.valueOf(decodedJWT.getSubject());
             String name = decodedJWT
                     .getClaim("name").asString();
+            String sex = decodedJWT
+                    .getClaim("sex").asString();
             int weight = decodedJWT.getClaim("weight").asInt();
             int height = decodedJWT.getClaim("height").asInt();
             int age = decodedJWT.getClaim("age").asInt();
@@ -67,6 +70,7 @@ public class MyAppJWT {
             return AuthProfile.builder()
                     .id(id)
                     .name(name)
+                    .sex(sex)
                     .weight(weight)
                     .height(height)
                     .age(age)

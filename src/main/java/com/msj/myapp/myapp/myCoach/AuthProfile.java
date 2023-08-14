@@ -20,6 +20,7 @@ public class AuthProfile {
 
 private long id;
 private String name;
+private String sex;
 private int weight;
 private int height;
 private int age;
