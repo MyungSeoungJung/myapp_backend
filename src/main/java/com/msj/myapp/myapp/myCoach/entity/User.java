@@ -34,7 +34,4 @@ public class User {
     //UserService에서 set받은 programName을 DB에 저장
     private String programName;
 
-
-
-
 }

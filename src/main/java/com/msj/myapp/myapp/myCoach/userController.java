@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -141,5 +142,22 @@ public class userController {
 
     }
 
+    @Auth  
+    @PostMapping (value = "selectProgram")
+//    프로그램 선택해서 user엔티티에 save하기
+    public void selectProgram (@RequestAttribute AuthProfile authProfile,@RequestBody Program program) {
 
+        long userid = authProfile.getId();
+        // 선택한 프로그램 정보
+        String selectedProgramTitle = program.getProgramTitle();
+//        JPA는
+        Optional<User> user = repo.findById(userid);
+        if (user.isPresent()) {
+            User finduser = user.get();
+            finduser.setProgramName(selectedProgramTitle);
+            repo.save(finduser);
+        } else {
+            // 해당 ID에 해당하는 유저를 찾지 못한 경우에 대한 처리
+        }
+    }
 }
