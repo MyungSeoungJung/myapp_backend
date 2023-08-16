@@ -156,6 +156,8 @@ public class userController {
             User finduser = user.get();
             finduser.setProgramName(selectedProgramTitle);   //찾은 유저에 program 저장
             repo.save(finduser);
+
+
             return ResponseEntity.status(HttpStatus.OK).build();
         } else {
 //            404 때리기
