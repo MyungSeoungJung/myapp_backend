@@ -1,10 +1,11 @@
-package com.msj.myapp.myapp.myCoach.ProgramController;
+package com.msj.myapp.myapp.program;
 
 
-import com.msj.myapp.myapp.myCoach.entity.Program;
-import com.msj.myapp.myapp.myCoach.entity.ProgramRepository;
-import com.msj.myapp.myapp.myCoach.entity.UserRepository;
+import com.msj.myapp.myapp.program.Program;
+import com.msj.myapp.myapp.program.ProgramRepository;
+import com.msj.myapp.myapp.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,14 @@ public class ProgramController {
     public ResponseEntity<List<Program>> choiceProgram(){
 
         return null;
+    }
+
+
+    @GetMapping (value = "recommendProgram")
+    public ResponseEntity<List<Program>> recommendProgram () {
+        List<Program> programs = programRepository.findAll(Sort.by("id").ascending());
+        return ResponseEntity.status(HttpStatus.OK).body(programs);
+
     }
 
 }

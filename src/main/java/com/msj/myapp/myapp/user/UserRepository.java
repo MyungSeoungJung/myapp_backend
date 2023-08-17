@@ -1,4 +1,4 @@
-package com.msj.myapp.myapp.myCoach.entity;
+package com.msj.myapp.myapp.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

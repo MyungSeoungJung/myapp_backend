@@ -1,5 +1,6 @@
-package com.msj.myapp.myapp.myCoach.entity;
+package com.msj.myapp.myapp.program;
 
+import com.msj.myapp.myapp.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

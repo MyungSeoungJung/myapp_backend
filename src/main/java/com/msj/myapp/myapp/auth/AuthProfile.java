@@ -1,4 +1,4 @@
-package com.msj.myapp.myapp.myCoach;
+package com.msj.myapp.myapp.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

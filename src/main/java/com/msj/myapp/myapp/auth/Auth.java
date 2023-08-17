@@ -1,4 +1,4 @@
-package com.msj.myapp.myapp.myCoach;
+package com.msj.myapp.myapp.auth;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

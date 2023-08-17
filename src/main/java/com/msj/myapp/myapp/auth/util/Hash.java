@@ -1,4 +1,4 @@
-package com.msj.myapp.myapp.myCoach.MyCoachutil;
+package com.msj.myapp.myapp.auth.util;
 
 //gradle 외부라이브러리 추가및 동기화
 import at.favre.lib.crypto.bcrypt.BCrypt;

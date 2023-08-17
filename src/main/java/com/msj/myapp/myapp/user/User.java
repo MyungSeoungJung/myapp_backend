@@ -1,4 +1,4 @@
-package com.msj.myapp.myapp.myCoach.entity;
+package com.msj.myapp.myapp.user;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

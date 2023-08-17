@@ -1,11 +1,12 @@
-package com.msj.myapp.myapp.myCoach.entity;
+package com.msj.myapp.myapp.program;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Primary
 public interface ProgramRepository extends JpaRepository<Program,Long> {
+    Optional<Program> findByProgramTitle(String programTitle);
 
 }

@@ -1,14 +1,14 @@
-package com.msj.myapp.myapp.myCoach;
+package com.msj.myapp.myapp.auth;
 
 
 
-import com.msj.myapp.myapp.myCoach.MyCoachutil.Hash;
-import com.msj.myapp.myapp.myCoach.MyCoachutil.MyAppJWT;
-import com.msj.myapp.myapp.myCoach.entity.Program;
-import com.msj.myapp.myapp.myCoach.entity.ProgramRepository;
-import com.msj.myapp.myapp.myCoach.entity.User;
-import com.msj.myapp.myapp.myCoach.entity.UserRepository;
-import com.msj.myapp.myapp.myCoach.request.signupRequest;
+import com.msj.myapp.myapp.auth.util.Hash;
+import com.msj.myapp.myapp.auth.util.JWT;
+import com.msj.myapp.myapp.program.Program;
+import com.msj.myapp.myapp.program.ProgramRepository;
+import com.msj.myapp.myapp.user.User;
+import com.msj.myapp.myapp.user.UserRepository;
+import com.msj.myapp.myapp.user.request.SignupRequest;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
-public class userController {
+public class UserController {
 
     @Autowired
     private UserRepository repo;
@@ -40,12 +39,12 @@ public class userController {
     private Hash hash;
 
     @Autowired
-    private MyAppJWT myAppJwt;
+    private JWT myAppJwt;
 
 
 
     @PostMapping (value = "/signup")
-    public ResponseEntity signup (@RequestBody signupRequest req){
+    public ResponseEntity signup (@RequestBody SignupRequest req){
         System.out.println(req);
         long userId = service.createIdentity(req);
 
@@ -119,7 +118,6 @@ public class userController {
     @Auth
     @GetMapping (value = "main")   //Auth어노테이션 작동 토큰 가로채서 @RequestAttribute에 반환
     public ResponseEntity<Map<String,Object>> mainpage (@RequestAttribute AuthProfile authProfile){
-
         //반환할 유저정보
         Map<String, Object> res = new HashMap<>();
         res.put("name",authProfile.getName());
@@ -135,12 +133,6 @@ public class userController {
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
-    @GetMapping (value = "recommendProgram")
-    public ResponseEntity<List<Program>> recommendProgram () {
-        List<Program> programs = programRepository.findAll(Sort.by("id").ascending());
-        return ResponseEntity.status(HttpStatus.OK).body(programs);
-
-    }
 
     @Auth  
     @PostMapping (value = "selectProgram")  // 추천 프로그램창 선택

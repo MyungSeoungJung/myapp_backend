@@ -1,8 +1,8 @@
-package com.msj.myapp.myapp.myCoach;
+package com.msj.myapp.myapp.auth;
 
 
 
-import com.msj.myapp.myapp.myCoach.MyCoachutil.MyAppJWT;
+import com.msj.myapp.myapp.auth.util.JWT;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,7 +16,7 @@ import java.lang.reflect.Method;
 // *****WebMvcCOnfig에 인터셉터 추가 해줘야됨 ***********
 public class Authinterceptor implements HandlerInterceptor {
     @Autowired
-    MyAppJWT myAppJwt;
+    JWT myAppJwt;
     @Override   //  WebMvcConfig에서 addInterceptors를 Override해서 사용
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
    throws Exception {
