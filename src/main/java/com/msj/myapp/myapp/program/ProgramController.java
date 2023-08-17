@@ -23,6 +23,13 @@ public class ProgramController {
     @Autowired
     UserRepository repo;
 
+
+    @GetMapping (value = "/recommendProgram")
+    public ResponseEntity<List<Program>> recommendProgram () {
+        List<Program> programs = programRepository.findAll(Sort.by("id").ascending());
+        return ResponseEntity.status(HttpStatus.OK).body(programs);
+    }
+
     @PostMapping ("/addProgram")
     public ResponseEntity addProgram(@RequestBody Program program){
         System.out.println(program);
@@ -43,14 +50,6 @@ public class ProgramController {
     public ResponseEntity<List<Program>> choiceProgram(){
 
         return null;
-    }
-
-
-    @GetMapping (value = "recommendProgram")
-    public ResponseEntity<List<Program>> recommendProgram () {
-        List<Program> programs = programRepository.findAll(Sort.by("id").ascending());
-        return ResponseEntity.status(HttpStatus.OK).body(programs);
-
     }
 
 }

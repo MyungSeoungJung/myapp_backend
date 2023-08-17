@@ -49,13 +49,13 @@ public class UserService {
         User savedUser = repo.save(toSaveUser);
 
 
-//        Optional<Program> program = programRepo.findByProgramTitle(req.getProgramName());
-//        if (program.isPresent()) {
-//            savedUser.setProgram(program.get()); // 프로그램을 유저에 연결
+        Optional<Program> program = programRepo.findByProgramTitle(req.getProgramTitle());
+        if (program.isPresent()) {
+            savedUser.setProgram(program.get()); // 프로그램을 유저에 연결
             repo.save(savedUser);
-//        } else {
-//            // 프로그램을 찾지 못한 경우에 대한 처리
-//        }
+        } else {
+            // 프로그램을 찾지 못한 경우에 대한 처리
+        }
 
         return savedUser.getId();
     }

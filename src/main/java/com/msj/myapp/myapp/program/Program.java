@@ -1,11 +1,14 @@
 package com.msj.myapp.myapp.program;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.msj.myapp.myapp.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -27,9 +30,24 @@ public class Program {
     private String img;
 
     private String programIntro; //프로그램 소개글
+
     @Column(unique = true)
     private String programTitle;  // 프로그램 제목
 
-    @OneToOne
-    private User user;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "program")
+    private List<User> users;
+
+    @Override
+    public String toString() {
+        return "Program{" +
+                "id=" + id +
+                ", rate='" + rate + '\'' +
+                ", programLevel='" + programLevel + '\'' +
+                ", programGoal='" + programGoal + '\'' +
+                ", img='" + img + '\'' +
+                ", programIntro='" + programIntro + '\'' +
+                ", programTitle='" + programTitle + '\'' +
+                '}';
+    }
 }
