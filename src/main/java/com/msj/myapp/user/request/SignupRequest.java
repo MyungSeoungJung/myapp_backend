@@ -1,4 +1,4 @@
-package com.msj.myapp.myapp.user.request;
+package com.msj.myapp.user.request;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

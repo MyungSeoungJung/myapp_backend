@@ -1,4 +1,4 @@
-package com.msj.myapp.myapp.user;
+package com.msj.myapp.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

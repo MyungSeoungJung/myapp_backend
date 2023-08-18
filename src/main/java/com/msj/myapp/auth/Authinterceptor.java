@@ -1,8 +1,8 @@
-package com.msj.myapp.myapp.auth;
+package com.msj.myapp.auth;
 
 
 
-import com.msj.myapp.myapp.auth.util.JWT;
+import com.msj.myapp.auth.util.JWT;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

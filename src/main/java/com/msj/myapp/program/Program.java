@@ -1,7 +1,7 @@
-package com.msj.myapp.myapp.program;
+package com.msj.myapp.program;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.msj.myapp.myapp.user.User;
+import com.msj.myapp.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

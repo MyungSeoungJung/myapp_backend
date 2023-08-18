@@ -1,12 +1,12 @@
-package com.msj.myapp.myapp.auth;
+package com.msj.myapp.auth;
 
 
-import com.msj.myapp.myapp.auth.util.Hash;
-import com.msj.myapp.myapp.program.Program;
-import com.msj.myapp.myapp.program.ProgramRepository;
-import com.msj.myapp.myapp.user.User;
-import com.msj.myapp.myapp.user.UserRepository;
-import com.msj.myapp.myapp.user.request.SignupRequest;
+import com.msj.myapp.auth.util.Hash;
+import com.msj.myapp.program.Program;
+import com.msj.myapp.program.ProgramRepository;
+import com.msj.myapp.user.User;
+import com.msj.myapp.user.UserRepository;
+import com.msj.myapp.user.request.SignupRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,25 +1,22 @@
-package com.msj.myapp.myapp.auth;
+package com.msj.myapp.auth;
 
 
 
-import com.msj.myapp.myapp.auth.util.Hash;
-import com.msj.myapp.myapp.auth.util.JWT;
-import com.msj.myapp.myapp.program.Program;
-import com.msj.myapp.myapp.program.ProgramRepository;
-import com.msj.myapp.myapp.user.User;
-import com.msj.myapp.myapp.user.UserRepository;
-import com.msj.myapp.myapp.user.request.SignupRequest;
+import com.msj.myapp.auth.util.Hash;
+import com.msj.myapp.auth.util.JWT;
+import com.msj.myapp.program.ProgramRepository;
+import com.msj.myapp.user.User;
+import com.msj.myapp.user.UserRepository;
+import com.msj.myapp.user.request.SignupRequest;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 

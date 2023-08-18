@@ -1,7 +1,7 @@
-package com.msj.myapp.myapp.user;
+package com.msj.myapp.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.msj.myapp.myapp.program.Program;
+import com.msj.myapp.program.Program;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

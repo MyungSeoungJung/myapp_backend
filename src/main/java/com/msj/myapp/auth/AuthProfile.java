@@ -1,4 +1,4 @@
-package com.msj.myapp.myapp.auth;
+package com.msj.myapp.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

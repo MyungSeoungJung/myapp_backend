@@ -1,4 +1,4 @@
-package com.msj.myapp.myapp.program;
+package com.msj.myapp.program;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,6 +1,6 @@
-package com.msj.myapp.myapp.configuration;
+package com.msj.myapp.configuration;
 
-import com.msj.myapp.myapp.auth.Authinterceptor;
+import com.msj.myapp.auth.Authinterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

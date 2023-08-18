@@ -1,9 +1,7 @@
-package com.msj.myapp.myapp.program;
+package com.msj.myapp.program;
 
 
-import com.msj.myapp.myapp.program.Program;
-import com.msj.myapp.myapp.program.ProgramRepository;
-import com.msj.myapp.myapp.user.UserRepository;
+import com.msj.myapp.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;

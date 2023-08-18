@@ -1,8 +1,8 @@
-package com.msj.myapp.myapp.auth.configuration;
+package com.msj.myapp.auth.configuration;
 
 
-import com.msj.myapp.myapp.auth.util.Hash;
-import com.msj.myapp.myapp.auth.util.JWT;
+import com.msj.myapp.auth.util.JWT;
+import com.msj.myapp.auth.util.Hash;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
