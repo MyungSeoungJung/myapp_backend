@@ -1,6 +1,8 @@
 package com.msj.myapp.program;
 
 
+import com.msj.myapp.auth.Auth;
+import com.msj.myapp.auth.AuthProfile;
 import com.msj.myapp.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/program")
@@ -20,8 +23,19 @@ public class ProgramController {
     private ProgramRepository programRepository;
     @Autowired
     UserRepository repo;
-
-
+    @Auth
+    @GetMapping(value = "/myExercise")
+    public ResponseEntity<Map<String,Object>> myExercise (@RequestAttribute AuthProfile authProfile){
+    Map<String,Object> res = new HashMap<>();
+    Optional<Program> matchProgram = programRepository.findByProgramTitle(authProfile.getProgramName());
+    res.put("programTitle",matchProgram.get().getProgramTitle());
+    res.put("programGoal",matchProgram.get().getProgramGoal());
+    res.put("programLevel",matchProgram.get().getProgramLevel());
+    res.put("programIntro",matchProgram.get().getProgramIntro());
+    res.put("programImg",matchProgram.get().getImg());
+    res.put("programRate",matchProgram.get().getRate());
+        return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
     @GetMapping (value = "/recommendProgram")
     public ResponseEntity<List<Program>> recommendProgram () {
         List<Program> programs = programRepository.findAll(Sort.by("id").ascending());
@@ -46,7 +60,6 @@ public class ProgramController {
 
     @GetMapping ("/choiceProgram")
     public ResponseEntity<List<Program>> choiceProgram(){
-
         return null;
     }
 
