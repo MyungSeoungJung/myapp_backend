@@ -36,6 +36,7 @@ public class ProgramController {
     res.put("programIntro",matchProgram.get().getProgramIntro());
     res.put("programImg",matchProgram.get().getImg());
     res.put("programRate",matchProgram.get().getRate());
+    res.put("coachName",matchProgram.get().getCoachName());
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
     @GetMapping (value = "/recommendProgram")
