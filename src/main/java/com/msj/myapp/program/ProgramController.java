@@ -5,6 +5,8 @@ import com.msj.myapp.auth.Auth;
 import com.msj.myapp.auth.AuthProfile;
 import com.msj.myapp.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,15 +54,41 @@ public class ProgramController {
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Program>> getProgram() {
-        List<Program> program = programRepository.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(program);
-    }
 
     @GetMapping ("/choiceProgram")
     public ResponseEntity<List<Program>> choiceProgram(){
         return null;
     }
 
+//페이징------------------------------------------------------------
+    @GetMapping(value = "/getProgram")
+    public ResponseEntity<List<Program>> getProgram() {
+        List<Program> program = programRepository.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(program);
+    }
+
+    @GetMapping(value = "/paging")
+    public Page<Program> getPostsPaging(@RequestParam int page, @RequestParam int size) {
+        System.out.println(page + "1");
+        System.out.println(size + "1");
+
+        Sort sort = Sort.by("id").descending();
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        return programRepository.findAll(pageRequest);
+    }
+
+    //No가 포함된 목록 조회
+    @GetMapping(value = "/paging/search")
+    public Page<Program> getPostPagingSearch(@RequestParam int page,@RequestParam int size,String query){
+        Sort sort = Sort.by("id").descending();
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+//    작성자 타이틀 출력
+        System.out.println(query); ///
+        System.out.println(query); ///
+        return programRepository.findByProgramTitleContains(query,pageRequest);
+    }
+
 }
+
+
+
