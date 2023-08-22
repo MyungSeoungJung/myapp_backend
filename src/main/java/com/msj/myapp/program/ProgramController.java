@@ -48,6 +48,7 @@ public class ProgramController {
 
     @GetMapping (value = "/detailProgram")
     public ResponseEntity<Map<String,Object>> detailProgram (@RequestParam long id) {
+        System.out.println(id);
         Optional<Program> matchProgram = programRepository.findById(id);
         Map<String,Object> res = new HashMap<>();
         res.put("programTitle",matchProgram.get().getProgramTitle());
