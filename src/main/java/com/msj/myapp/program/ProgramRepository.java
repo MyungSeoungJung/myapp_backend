@@ -14,4 +14,6 @@ public interface ProgramRepository extends JpaRepository<Program,Long> {
     Page<Program> findByProgramTitleContains(String programTitle, Pageable pageable);
 
 
+    @Override
+    Optional<Program> findById(Long aLong);
 }

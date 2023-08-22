@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +45,23 @@ public class ProgramController {
         List<Program> programs = programRepository.findAll(Sort.by("id").ascending());
         return ResponseEntity.status(HttpStatus.OK).body(programs);
     }
+
+    @GetMapping (value = "/detailProgram")
+    public ResponseEntity<Map<String,Object>> detailProgram (@RequestParam long id) {
+        Optional<Program> matchProgram = programRepository.findById(id);
+        Map<String,Object> res = new HashMap<>();
+        res.put("programTitle",matchProgram.get().getProgramTitle());
+        res.put("programGoal",matchProgram.get().getProgramGoal());
+        res.put("programLevel",matchProgram.get().getProgramLevel());
+        res.put("programIntro",matchProgram.get().getProgramIntro());
+        res.put("programImg",matchProgram.get().getImg());
+        res.put("programRate",matchProgram.get().getRate());
+        res.put("coachName",matchProgram.get().getCoachName());
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
+
 
     @PostMapping ("/addProgram")
     public ResponseEntity addProgram(@RequestBody Program program){
