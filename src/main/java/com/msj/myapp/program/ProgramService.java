@@ -1,0 +1,19 @@
+package com.msj.myapp.program;
+
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ProgramService {
+    @Autowired
+    ProgramRepository programRepository;
+
+    @Autowired
+    ProgramCommentRepository commentRepo;
+
+    @Transactional
+    public void createComment(ProgramComment comment) {
+        commentRepo.save(comment);
+    }
+}

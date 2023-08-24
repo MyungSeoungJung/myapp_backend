@@ -26,6 +26,11 @@ public class ProgramController {
     private ProgramRepository programRepository;
     @Autowired
     UserRepository repo;
+
+    @Autowired
+    ProgramCommentRepository programCommentRepository;
+    @Autowired
+    ProgramService service;
     @Auth
     @GetMapping(value = "/myExercise")
     public ResponseEntity<Map<String,Object>> myExercise (@RequestAttribute AuthProfile authProfile){
@@ -108,6 +113,50 @@ public class ProgramController {
         return programRepository.findByProgramTitleContains(query,pageRequest);
     }
 
+
+//    프로그램 리뷰 달기
+@Auth
+@PostMapping("/comments")
+public ResponseEntity addComments(
+        @RequestParam long id,
+        @RequestBody ProgramComment programComment,
+        @RequestAttribute AuthProfile authProfile) {
+
+    Optional<Program> matchprogram = programRepository.findById(id);
+    if(!matchprogram.isPresent()) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+    // 커멘트 추가
+    programComment.setUserId(authProfile.getId());
+    programComment.setUserSex(authProfile.getSex());
+    programComment.setUserName(authProfile.getName());
+    programComment.setUserAge(authProfile.getAge());
+    programComment.getContent();
+    programComment.setProgram(matchprogram.get()); //  댓글 데이터베이스에 URL엔드포인트 파라미터로 받은 id 찾아서 할당
+
+    // 트랜잭션 처리 x = 데이터베이스에 저장 태랜잭션은 나중에
+    service.createComment(programComment);
+
+    Map<String,Object> res = new HashMap<>();
+    res.put("userId",programComment.getUserId());
+    res.put("content",programComment.getContent());
+    res.put("userName",programComment.getUserName());
+    res.put("userSex",programComment.getUserSex());
+    res.put("userAge",programComment.getUserAge());
+    return ResponseEntity.status(HttpStatus.CREATED).body(res);
+}
+
+// 프로그램 리뷰 띄우기
+    @GetMapping ("/getComment")
+    public ResponseEntity<List<ProgramComment>> getComment (@RequestParam long id) {
+//        id로 일치하는 program 찾고
+        Optional<Program> program = programRepository.findById(id);
+// 찾은 프로그램에서 comment데이터베이스에서 다시 일치하는 애 찾고
+
+        List<ProgramComment> programComments =   programCommentRepository.findByProgram(program);
+//        찾은애를 이제 리스트로 배출
+        return ResponseEntity.status(HttpStatus.OK).body(programComments);
+    }
 }
 
 
