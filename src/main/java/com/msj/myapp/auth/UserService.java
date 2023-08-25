@@ -21,7 +21,6 @@ public class UserService {
     Hash hash;
 
     @Autowired
-    //데이터 베이스와 접촉하기 위해? 생성자는 객체를 초기화해주기 위해서인데 이해가 안감
     public UserService(UserRepository repo, ProgramRepository programRepo){
         this.repo = repo;
         this.programRepo = programRepo;
@@ -53,8 +52,6 @@ public class UserService {
         if (program.isPresent()) {
             savedUser.setProgram(program.get()); // 프로그램을 유저에 연결
             repo.save(savedUser);
-        } else {
-            // 프로그램을 찾지 못한 경우에 대한 처리
         }
 
         return savedUser.getId();
