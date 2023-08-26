@@ -46,8 +46,10 @@ public class ProgramController {
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
     @GetMapping (value = "/recommendProgram")
-    public ResponseEntity<List<Program>> recommendProgram () {
+    public ResponseEntity<List<Program>> recommendProgram (@RequestParam String goal) {
+//        List<Program> programs = programRepository.findByProgramGoal(program);
         List<Program> programs = programRepository.findAll(Sort.by("id").ascending());
+
         return ResponseEntity.status(HttpStatus.OK).body(programs);
     }
 
