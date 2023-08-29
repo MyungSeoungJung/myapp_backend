@@ -1,12 +1,15 @@
 package com.msj.myapp.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.msj.myapp.Post.Post;
 import com.msj.myapp.program.Program;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -34,11 +37,15 @@ public class User {
     private String secret;
     private String programName;
 
-
+//   프로그램
     @ManyToOne
     @JoinColumn(name = "program_id")
     @JsonBackReference
     private Program program;
+
+//    포스트
+    @OneToMany
+    private List<Post> post;
 
 //    유저,프로그램 다대일 관계를 맺으면 서로 필드를 공유하기때문에
 //    재귀함수가 발생할 수 있는데 toString() 메서드를 오버라이드해서 각자 클래스의 필드들을 분리해 놓아 재귀함수 방지
