@@ -1,6 +1,6 @@
 package com.msj.myapp.Post;
 
-import com.msj.myapp.user.User;
+import com.msj.myapp.Post.entity.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

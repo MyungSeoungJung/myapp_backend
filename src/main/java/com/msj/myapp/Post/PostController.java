@@ -1,5 +1,7 @@
 package com.msj.myapp.Post;
 
+import com.msj.myapp.Post.entity.Post;
+import com.msj.myapp.Post.request.PostModifyRequest;
 import com.msj.myapp.auth.Auth;
 import com.msj.myapp.auth.AuthProfile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,5 +86,30 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @Auth
+    @PutMapping(value = "/modifyPost")
+    public ResponseEntity modifyPost(@RequestParam long no, @RequestBody PostModifyRequest post, @RequestAttribute AuthProfile authProfile) {
+        System.out.println(no);
+        System.out.println(post);
 
+        Optional<Post> findedPost = repo.findById(no);
+        if (!findedPost.isPresent()) {
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        //위에서 있으면 수정 후 저장
+        Post toModifyPost = findedPost.get();
+
+        if (post.getTitle() != null && !post.getTitle().isEmpty()) {
+            toModifyPost.setTitle(post.getTitle());
+        }
+        if (post.getContent() != null && !post.getContent().isEmpty()) {
+            toModifyPost.setContent(post.getContent());
+        }
+        //새로 덮어쓰기
+        repo.save(toModifyPost);
+
+        //ok 처리
+        return ResponseEntity.ok().build();
+    }
 }

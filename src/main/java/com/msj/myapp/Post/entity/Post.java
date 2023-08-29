@@ -1,4 +1,4 @@
-package com.msj.myapp.Post;
+package com.msj.myapp.Post.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

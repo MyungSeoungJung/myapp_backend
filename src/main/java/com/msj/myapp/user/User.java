@@ -1,7 +1,7 @@
 package com.msj.myapp.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.msj.myapp.Post.Post;
+import com.msj.myapp.Post.entity.Post;
 import com.msj.myapp.program.Program;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
