@@ -1,5 +1,6 @@
-package com.msj.myapp.program;
+package com.msj.myapp.programComment;
 
+import com.msj.myapp.program.Program;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

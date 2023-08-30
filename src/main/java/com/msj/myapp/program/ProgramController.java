@@ -3,6 +3,8 @@ package com.msj.myapp.program;
 
 import com.msj.myapp.auth.Auth;
 import com.msj.myapp.auth.AuthProfile;
+import com.msj.myapp.programComment.ProgramComment;
+import com.msj.myapp.programComment.ProgramCommentRepository;
 import com.msj.myapp.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -159,6 +160,15 @@ public ResponseEntity addComments(
         List<ProgramComment> programComments =   programCommentRepository.findByProgram(program);
 //        찾은애를 이제 리스트로 배출
         return ResponseEntity.status(HttpStatus.OK).body(programComments);
+    }
+
+
+
+    @Auth
+    @GetMapping (value = "/myComment")
+    public List<ProgramComment> getPostList(@RequestAttribute AuthProfile authProfile) {
+        List<ProgramComment> list = programCommentRepository.findByUserId(authProfile.getId());
+        return list;
     }
 }
 
