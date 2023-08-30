@@ -132,26 +132,4 @@ public class UserController {
     }
 
 
-//    @Auth
-//    @PostMapping (value = "/selectProgram")  // 추천 프로그램창 선택
-//    public ResponseEntity selectProgram (@RequestAttribute AuthProfile authProfile,@RequestBody Program program) {
-////        토큰 낚아챈 authProfile의 id 할당
-//        long userid = authProfile.getId();
-//        // 선택한 프로그램 정보
-//        String selectedProgramTitle = program.getProgramTitle();
-////       JpaRepository 인터페이스를 사용할 때, Optional로 반환이 되어야함.
-////       Optional = 객체를 감싸는 래퍼 클래스
-//        Optional<User> user = repo.findById(userid);
-//        if (user.isPresent()) {
-//            User finduser = user.get();
-//            finduser.setProgramName(selectedProgramTitle);   //찾은 유저에 program 저장
-//            repo.save(finduser);
-//
-//
-//            return ResponseEntity.status(HttpStatus.OK).build();
-//        } else {
-////            404 때리기
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//    }
 }

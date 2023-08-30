@@ -5,6 +5,7 @@ import com.msj.myapp.auth.Auth;
 import com.msj.myapp.auth.AuthProfile;
 import com.msj.myapp.programComment.ProgramComment;
 import com.msj.myapp.programComment.ProgramCommentRepository;
+import com.msj.myapp.user.User;
 import com.msj.myapp.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -170,7 +171,41 @@ public ResponseEntity addComments(
         List<ProgramComment> list = programCommentRepository.findByUserId(authProfile.getId());
         return list;
     }
-}
+
+    @Auth
+    @PostMapping(value = "/changeProgram")  // 추천 프로그램창 선택
+    public ResponseEntity selectProgram(
+            @RequestAttribute AuthProfile authProfile,
+            @RequestBody Program program
+    ) {
+        System.out.println(program + "프로그램 이름 출력-------------------");
+        // 토큰 낚아챈 authProfile의 id 할당
+        long userId = authProfile.getId();
+
+        // 선택한 프로그램 정보
+        String newProgramTitle = program.getProgramTitle();
+
+        Optional<User> user = repo.findById(userId);
+
+        if (user.isPresent()) {
+            User findUser = user.get();
+            Optional<Program> modifyProgram = programRepository.findByProgramTitle(newProgramTitle);
+
+            if (modifyProgram.isPresent()) {
+                findUser.setProgramName(newProgramTitle);
+                repo.save(findUser);
+
+                return ResponseEntity.status(HttpStatus.OK).build();
+            } else {
+                // 선택한 프로그램이 없을 경우 404 반환
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+        } else {
+            // 유저가 없을 경우 404 반환
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+    }
 
 
 
