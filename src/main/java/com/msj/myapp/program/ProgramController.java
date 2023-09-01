@@ -7,6 +7,9 @@ import com.msj.myapp.programComment.ProgramComment;
 import com.msj.myapp.programComment.ProgramCommentRepository;
 import com.msj.myapp.user.User;
 import com.msj.myapp.user.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Tag(name = "운동 프로그램 관리 처리")
 @RestController
 @RequestMapping("/program")
 public class ProgramController {
@@ -33,6 +37,7 @@ public class ProgramController {
     ProgramCommentRepository programCommentRepository;
     @Autowired
     ProgramService service;
+    @Operation(summary = "내가 선택한 운동 프로그램", security = { @SecurityRequirement(name = "bearer-key") })
     @Auth
     @GetMapping(value = "/myExercise")
     public ResponseEntity<Map<String,Object>> myExercise (@RequestAttribute AuthProfile authProfile){
@@ -47,6 +52,7 @@ public class ProgramController {
     res.put("coachName",matchProgram.get().getCoachName());
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
+    @Operation(summary = "추천 운동 프로그램 띄우기")
     @GetMapping (value = "/recommendProgram")
     public ResponseEntity<List<Program>> recommendProgram (@RequestParam String goal) {
         System.out.println(goal);
@@ -55,14 +61,14 @@ public class ProgramController {
 
         return ResponseEntity.status(HttpStatus.OK).body(programs);
     }
-
+    @Operation(summary = "운동 프로그램 띄우기")
     @GetMapping (value = "/bestProgram")
     public ResponseEntity<List<Program>> recommendProgram () {
         List<Program> programs = programRepository.findAll(Sort.by("id").ascending());
 
         return ResponseEntity.status(HttpStatus.OK).body(programs);
     }
-
+    @Operation(summary = "각각의 운동 프로그램 페이지")
     @GetMapping (value = "/detailProgram")
     public ResponseEntity<Map<String,Object>> detailProgram (@RequestParam long id) {
         System.out.println(id);
@@ -80,7 +86,7 @@ public class ProgramController {
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
-
+    @Operation(summary = "운동 프로그램 추가하기")
     @PostMapping ("/addProgram")
     public ResponseEntity addProgram(@RequestBody Program program){
         System.out.println(program);
@@ -91,19 +97,20 @@ public class ProgramController {
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 
-
+    @Operation(summary = "운동 프로그램 선택")
     @GetMapping ("/choiceProgram")
     public ResponseEntity<List<Program>> choiceProgram(){
         return null;
     }
 
 //페이징------------------------------------------------------------
-    @GetMapping(value = "/getProgram")
+@Operation(summary = "운동 프로그램 띄우기")
+@GetMapping(value = "/getProgram")
     public ResponseEntity<List<Program>> getProgram() {
         List<Program> program = programRepository.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(program);
     }
-
+    @Operation(summary = "운동 프로그램 페이징")
     @GetMapping(value = "/paging")
     public Page<Program> getPostsPaging(@RequestParam int page, @RequestParam int size) {
         System.out.println(page + "1");
@@ -113,7 +120,7 @@ public class ProgramController {
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         return programRepository.findAll(pageRequest);
     }
-
+    @Operation(summary = "운동 프로그램 검색")
     //No가 포함된 목록 조회
     @GetMapping(value = "/paging/search")
     public Page<Program> getPostPagingSearch(@RequestParam int page,@RequestParam int size,String query){
@@ -125,7 +132,7 @@ public class ProgramController {
         return programRepository.findByProgramTitleContains(query,pageRequest);
     }
 
-
+@Operation(summary = "운동 프로그램 리뷰 작성", security = { @SecurityRequirement(name = "bearer-key") })
 //    프로그램 리뷰 달기
 @Auth
 @PostMapping("/comments")
@@ -159,7 +166,8 @@ public ResponseEntity addComments(
 }
 
 // 프로그램 리뷰 띄우기
-    @GetMapping ("/getComment")
+@Operation(summary = "운동 프로그램 댓글 띄우기")
+@GetMapping ("/getComment")
     public ResponseEntity<List<ProgramComment>> getComment (@RequestParam long id) {
 //        id로 일치하는 program 찾고
         Optional<Program> program = programRepository.findById(id);
@@ -171,7 +179,7 @@ public ResponseEntity addComments(
     }
 
 
-
+    @Operation(summary = "내가 작성한 운동 프로그램 리뷰", security = { @SecurityRequirement(name = "bearer-key") })
     @Auth
     @GetMapping (value = "/myComment")
     public List<ProgramComment> getPostList(@RequestAttribute AuthProfile authProfile) {
@@ -179,6 +187,7 @@ public ResponseEntity addComments(
         return list;
     }
 
+    @Operation(summary = "내가 선택한 운동 프로그램 변경", security = { @SecurityRequirement(name = "bearer-key") })
     @Auth
     @PostMapping(value = "/changeProgram")  // 추천 프로그램창 선택
     public ResponseEntity selectProgram(

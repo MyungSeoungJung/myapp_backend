@@ -4,6 +4,9 @@ import com.msj.myapp.Post.entity.Post;
 import com.msj.myapp.Post.request.PostModifyRequest;
 import com.msj.myapp.auth.Auth;
 import com.msj.myapp.auth.AuthProfile;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -12,21 +15,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+@Tag(name = "커뮤니티 관리 처리")
 @RestController
 @RequestMapping(value = "/posts")
 public class PostController {
     @Autowired
     PostRepository repo;
 
-
-
+    @Operation(summary = "게시물 띄우기")
     @GetMapping(value = "/getPost")
     public List<Post> getPostList() {
         List<Post> list = repo.findAll(Sort.by("no").ascending());
         return list;
     }
 
-
+    @Operation(summary = "게시물 작성", security = { @SecurityRequirement(name = "bearer-key") })
     @Auth
     @PostMapping (value = "/addPost")
     public ResponseEntity<Map<String, Object>> addPost(@RequestBody Post post, @RequestAttribute AuthProfile authProfile) {
@@ -60,6 +63,7 @@ public class PostController {
     }
 
 
+    @Operation(summary = "내가 작성한 게시물", security = { @SecurityRequirement(name = "bearer-key") })
     @Auth
     @GetMapping (value = "/myPost")
     public List<Post> getPostList( @RequestAttribute AuthProfile authProfile) {
@@ -67,6 +71,7 @@ public class PostController {
         return list;
     }
 
+    @Operation(summary = "게시물 삭제", security = { @SecurityRequirement(name = "bearer-key") })
     @Auth
     @DeleteMapping(value = "/deletePost")
     public ResponseEntity removePost(@RequestParam long no, @RequestAttribute AuthProfile authProfile) {
@@ -86,6 +91,7 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @Operation(summary = "게시물 수정", security = { @SecurityRequirement(name = "bearer-key") })
     @Auth
     @PutMapping(value = "/modifyPost")
     public ResponseEntity modifyPost(@RequestParam long no, @RequestBody PostModifyRequest post, @RequestAttribute AuthProfile authProfile) {

@@ -33,7 +33,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowedMethods("*"); // 모든 메서드 허용(GET, POST.....)
     }
 
-//    인증처리용 인터셉터를 추가
+//    Spring MVC에 인터셉터를 추가
     @Override  //인터셉터 오버라이드 +등록이 되어 있어야 함+
     public void addInterceptors(InterceptorRegistry registry){
         registry.addInterceptor(authinterceptor);

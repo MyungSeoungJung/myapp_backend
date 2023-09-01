@@ -8,6 +8,9 @@ import com.msj.myapp.program.ProgramRepository;
 import com.msj.myapp.user.User;
 import com.msj.myapp.user.UserRepository;
 import com.msj.myapp.user.request.SignupRequest;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
+@Tag(name = "유저 관리 처리")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -39,7 +42,7 @@ public class UserController {
     private JWT myAppJwt;
 
 
-
+    @Operation(summary = "회원가입")
     @PostMapping (value = "/signup")
     public ResponseEntity signup (@RequestBody SignupRequest req){
         System.out.println(req);
@@ -47,6 +50,7 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userId);
     }
+    @Operation(summary = "로그인")
 
     @PostMapping (value = "/signin")        //@RequestParam = 쿼리값을 받을때 사용 ex: input값 노션 에러/궁금증목록에 정리
     public ResponseEntity signIn (@RequestParam String phone,
@@ -111,7 +115,7 @@ public class UserController {
                 .build();
 
     }
-
+    @Operation(summary = "메인페이지 유저 정보 띄우기", security = { @SecurityRequirement(name = "bearer-key") })
     @Auth
     @GetMapping (value = "/main")   //Auth어노테이션 작동 토큰 가로채서 @RequestAttribute에 반환
     public ResponseEntity<Map<String,Object>> mainpage (@RequestAttribute AuthProfile authProfile){
