@@ -29,5 +29,4 @@ public class Post {
     private long commentCnt;
     // 최근 댓글 내용
     private String latestComment;
-
 }
