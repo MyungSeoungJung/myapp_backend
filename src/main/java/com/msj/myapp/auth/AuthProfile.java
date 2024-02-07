@@ -12,7 +12,6 @@ import java.security.PrivateKey;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthProfile {
-
 private long id;
 private String name;
 private String sex;

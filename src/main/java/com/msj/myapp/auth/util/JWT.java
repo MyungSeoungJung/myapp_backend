@@ -40,7 +40,6 @@ public class JWT {
             return AuthProfile.builder()
                     .id(id)
                     .build();
-
         } catch (JWTVerificationException e) {
             return null;
         }

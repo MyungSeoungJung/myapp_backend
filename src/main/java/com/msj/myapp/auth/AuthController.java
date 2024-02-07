@@ -51,7 +51,6 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userId);
     }
     @Operation(summary = "로그인")
-
     @PostMapping (value = "/signin")        //@RequestParam = 쿼리값을 받을때 사용 ex: input값 노션 에러/궁금증목록에 정리
     public ResponseEntity signIn (@RequestParam String phone,
                                   @RequestParam String password,
@@ -79,10 +78,8 @@ public class AuthController {
         User user = findUser.get();
         System.out.println("유저" + user);
 
-// 로그인 객체 반활할때 user가 선택한 program_name이 null이라면 js에서 알림창 뜨게 만들기
-//        ex if(response.program_name == null){
-//        alert 이런식으로 }
-//        --------------------------------------------토큰생성
+
+//      토큰생성
         String token = myAppJwt.createToken(
                 user.getId());
         System.out.println("토큰" + token);
@@ -105,14 +102,20 @@ public class AuthController {
 
     }
 
-    @Operation(summary = "메인페이지 유저 정보 띄우기", security = { @SecurityRequirement(name = "bearer-key") })
+    @Operation(summary = "메인페이지 유저 이름 띄우기", security = { @SecurityRequirement(name = "bearer-key") })
     @Auth
-    @GetMapping (value = "/main")
+    @GetMapping (value = "/displayUserNameOnMainPage")
     public ResponseEntity<Map<String,Object>> mainPage (@RequestAttribute AuthProfile authProfile){
+        Map<String, Object> response = new HashMap<>();
+        Optional<User> UserOptional = repo.findById(authProfile.getId());
+        if(UserOptional.isPresent()){
+        User user = UserOptional.get();
+        response.put("name",user.getName());
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
 
-        Map<String, Object> res = new HashMap<>();
-        res.put("name",authProfile.getName());
-        return ResponseEntity.status(HttpStatus.OK).body(res);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 
