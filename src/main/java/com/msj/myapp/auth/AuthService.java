@@ -14,24 +14,24 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class AuthService {
     private ProgramRepository programRepo;
     private UserRepository repo;
     @Autowired
     Hash hash;
 
     @Autowired
-    public UserService(UserRepository repo, ProgramRepository programRepo){
+    public AuthService(UserRepository repo, ProgramRepository programRepo){
         this.repo = repo;
         this.programRepo = programRepo;
     }
 
     @Transactional
-//    HTML에서 받은 양식을 고대로 가져 옴
+//  회원가입
     public long createIdentity(SignupRequest req){
         System.out.println("create아이덴티티" + req);
         User toSaveUser = User.builder()
-                .name(req.getName())  //html에서 입력 받은 signupRequest 객체의 필드를 get
+                .name(req.getName())
                 .sex(req.getSex())
                 .age(req.getAge())
                 .phone(req.getPhone())

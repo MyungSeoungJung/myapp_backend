@@ -42,7 +42,7 @@ public class ProgramController {
     @GetMapping(value = "/myExercise")
     public ResponseEntity<Map<String,Object>> myExercise (@RequestAttribute AuthProfile authProfile){
     Map<String,Object> res = new HashMap<>();
-    Optional<Program> matchProgram = programRepository.findByProgramTitle(authProfile.getProgramName());
+    Optional<Program> matchProgram = programRepository.findByProgramTitle(authProfile.getExerciseProgramName());
     res.put("programTitle",matchProgram.get().getProgramTitle());
     res.put("programGoal",matchProgram.get().getProgramGoal());
     res.put("programLevel",matchProgram.get().getProgramLevel());
@@ -50,22 +50,20 @@ public class ProgramController {
     res.put("programImg",matchProgram.get().getImg());
     res.put("programRate",matchProgram.get().getRate());
     res.put("coachName",matchProgram.get().getCoachName());
-        return ResponseEntity.status(HttpStatus.OK).body(res);
+    return ResponseEntity.status(HttpStatus.OK).body(res);
     }
     @Operation(summary = "추천 운동 프로그램 띄우기")
     @GetMapping (value = "/recommendProgram")
     public ResponseEntity<List<Program>> recommendProgram (@RequestParam String goal) {
-        System.out.println(goal);
+        System.out.println("check" + goal);
         List<Program> programs = programRepository.findByProgramGoal(goal);
-//        List<Program> programs = programRepository.findAll(Sort.by("id").ascending());
-
         return ResponseEntity.status(HttpStatus.OK).body(programs);
     }
+
     @Operation(summary = "운동 프로그램 띄우기")
     @GetMapping (value = "/bestProgram")
     public ResponseEntity<List<Program>> recommendProgram () {
         List<Program> programs = programRepository.findAll(Sort.by("id").ascending());
-
         return ResponseEntity.status(HttpStatus.OK).body(programs);
     }
     @Operation(summary = "각각의 운동 프로그램 페이지")
@@ -81,8 +79,6 @@ public class ProgramController {
         res.put("programImg",matchProgram.get().getImg());
         res.put("programRate",matchProgram.get().getRate());
         res.put("coachName",matchProgram.get().getCoachName());
-
-
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 

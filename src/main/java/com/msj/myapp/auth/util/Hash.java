@@ -4,12 +4,7 @@ package com.msj.myapp.auth.util;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 
 public class Hash {
-    // Bcrypt Hash 해성
     public String createHash(String cipherText) {
-        // https://www.baeldung.com/java-password-hashing
-        // https://mia-dahae.tistory.com/120
-
-        // https://blog.kakaocdn.net/dn/IdglW/btrEoJ6HDUJ/FmJqCChB9NCXd6fapmJdAk/img.png
         // 'hashToString': Salt와 함께 해시를 생성
         // hash create 할때는 salt를 랜덤으로 생성해서 저장
         return BCrypt

@@ -25,7 +25,7 @@ import java.util.Optional;
 @Tag(name = "유저 관리 처리")
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class AuthController {
 
     @Autowired
     private UserRepository repo;
@@ -34,7 +34,7 @@ public class UserController {
     private ProgramRepository programRepository;
 
     @Autowired
-    private UserService service;
+    private AuthService service;
     @Autowired
     private Hash hash;
 
@@ -59,6 +59,8 @@ public class UserController {
 
         Optional<User> findUser = repo.findByPhone(phone);  //휴대폰 번호로 일치하는 유저 객체 찾기
 
+        System.out.println(phone);
+        System.out.println(password);
 
         if (!findUser.isPresent()){  //유저 없으면
             // 유저 못 찾으면 401 에러
@@ -82,22 +84,9 @@ public class UserController {
 //        alert 이런식으로 }
 //        --------------------------------------------토큰생성
         String token = myAppJwt.createToken(
-                user.getId(),
-                user.getName(),
-                user.getSex(),
-                user.getWeight(),
-                user.getHeight(),
-                user.getAge(),
-                user.getActivity(),
-                user.getGoalCal(),
-                user.getProgramName(),
-                user.getUserChoiceLevel(),
-                user.getUserChoiceGoal());
-
+                user.getId());
         System.out.println("토큰" + token);
 
-
-        //name속성 = token
         Cookie cookie = new Cookie("token", token);
         cookie.setPath("/");
         cookie.setMaxAge((int) (myAppJwt.TOKEN_TIMEOUT / 1000L)); // 만료시간
@@ -115,23 +104,14 @@ public class UserController {
                 .build();
 
     }
+
     @Operation(summary = "메인페이지 유저 정보 띄우기", security = { @SecurityRequirement(name = "bearer-key") })
     @Auth
-    @GetMapping (value = "/main")   //Auth어노테이션 작동 토큰 가로채서 @RequestAttribute에 반환
-    public ResponseEntity<Map<String,Object>> mainpage (@RequestAttribute AuthProfile authProfile){
+    @GetMapping (value = "/main")
+    public ResponseEntity<Map<String,Object>> mainPage (@RequestAttribute AuthProfile authProfile){
 
-        //반환할 유저정보
         Map<String, Object> res = new HashMap<>();
         res.put("name",authProfile.getName());
-        res.put("sex",authProfile.getSex());
-        res.put("weight",authProfile.getWeight());
-        res.put("height",authProfile.getHeight());
-        res.put("age",authProfile.getAge());
-        res.put("activity",authProfile.getActivity());
-        res.put("goalCal",authProfile.getGoalCal());
-        res.put("programName",authProfile.getProgramName());
-        res.put("userChoiceLevel",authProfile.getUserChoiceLevel());
-        res.put("userChoiceGoal",authProfile.getUserChoiceGoal());
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
 

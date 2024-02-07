@@ -13,12 +13,11 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import java.lang.reflect.Method;
 
 @Component
-// *****WebMvcCOnfig에 인터셉터 추가 해줘야됨 ***********
 public class Authinterceptor implements HandlerInterceptor {
     @Autowired
     JWT myAppJwt;
 
-    @Override   //  WebMvcConfig에서 addInterceptors를 Override해서 사용
+    @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws Exception {
         // 1. 요청을 처리할 컨트롤 메서드에 @Auth 어노테이션이 있는지 확인
