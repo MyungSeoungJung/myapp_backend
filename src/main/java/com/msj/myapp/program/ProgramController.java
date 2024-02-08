@@ -1,6 +1,4 @@
 package com.msj.myapp.program;
-
-
 import com.msj.myapp.auth.Auth;
 import com.msj.myapp.auth.AuthProfile;
 import com.msj.myapp.programComment.ProgramComment;
@@ -27,31 +25,32 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/program")
 public class ProgramController {
-
     @Autowired
     private ProgramRepository programRepository;
     @Autowired
-    UserRepository repo;
-
+    UserRepository userRepository;
+    @Autowired
+    Program program;
     @Autowired
     ProgramCommentRepository programCommentRepository;
     @Autowired
     ProgramService service;
+
     @Operation(summary = "내가 선택한 운동 프로그램", security = { @SecurityRequirement(name = "bearer-key") })
     @Auth
     @GetMapping(value = "/myExercise")
     public ResponseEntity<Map<String,Object>> myExercise (@RequestAttribute AuthProfile authProfile){
-    Map<String,Object> res = new HashMap<>();
     Optional<Program> matchProgram = programRepository.findByProgramTitle(authProfile.getExerciseProgramName());
-    res.put("programTitle",matchProgram.get().getProgramTitle());
-    res.put("programGoal",matchProgram.get().getProgramGoal());
-    res.put("programLevel",matchProgram.get().getProgramLevel());
-    res.put("programIntro",matchProgram.get().getProgramIntro());
-    res.put("programImg",matchProgram.get().getImg());
-    res.put("programRate",matchProgram.get().getRate());
-    res.put("coachName",matchProgram.get().getCoachName());
-    return ResponseEntity.status(HttpStatus.OK).body(res);
+
+     if (matchProgram.isPresent()){
+        Map<String,Object> res = program.createProgramResponse(matchProgram.get());
+        return ResponseEntity.status(HttpStatus.OK).body(res);
+     }else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
+    }
+
     @Operation(summary = "추천 운동 프로그램 띄우기")
     @GetMapping (value = "/recommendProgram")
     public ResponseEntity<List<Program>> recommendProgram (@RequestParam String goal) {
@@ -69,17 +68,13 @@ public class ProgramController {
     @Operation(summary = "각각의 운동 프로그램 페이지")
     @GetMapping (value = "/detailProgram")
     public ResponseEntity<Map<String,Object>> detailProgram (@RequestParam long id) {
-        System.out.println(id);
-        Optional<Program> matchProgram = programRepository.findById(id);
-        Map<String,Object> res = new HashMap<>();
-        res.put("programTitle",matchProgram.get().getProgramTitle());
-        res.put("programGoal",matchProgram.get().getProgramGoal());
-        res.put("programLevel",matchProgram.get().getProgramLevel());
-        res.put("programIntro",matchProgram.get().getProgramIntro());
-        res.put("programImg",matchProgram.get().getImg());
-        res.put("programRate",matchProgram.get().getRate());
-        res.put("coachName",matchProgram.get().getCoachName());
-        return ResponseEntity.status(HttpStatus.OK).body(res);
+        Optional<Program> matchID = programRepository.findById(id);
+        if (matchID.isPresent()){
+            Map<String,Object> res = program.createProgramResponse(matchID.get());
+            return ResponseEntity.status(HttpStatus.OK).body(res);
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @Operation(summary = "운동 프로그램 추가하기")
@@ -99,9 +94,8 @@ public class ProgramController {
         return null;
     }
 
-//페이징------------------------------------------------------------
-@Operation(summary = "운동 프로그램 띄우기")
-@GetMapping(value = "/getProgram")
+    @Operation(summary = "운동 프로그램 띄우기")
+    @GetMapping(value = "/getProgram")
     public ResponseEntity<List<Program>> getProgram() {
         List<Program> program = programRepository.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(program);
@@ -109,9 +103,6 @@ public class ProgramController {
     @Operation(summary = "운동 프로그램 페이징")
     @GetMapping(value = "/paging")
     public Page<Program> getPostsPaging(@RequestParam int page, @RequestParam int size) {
-        System.out.println(page + "1");
-        System.out.println(size + "1");
-
         Sort sort = Sort.by("id").descending();
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         return programRepository.findAll(pageRequest);
@@ -122,34 +113,27 @@ public class ProgramController {
     public Page<Program> getPostPagingSearch(@RequestParam int page,@RequestParam int size,String query){
         Sort sort = Sort.by("id").descending();
         PageRequest pageRequest = PageRequest.of(page, size, sort);
-//    작성자 타이틀 출력
-        System.out.println(query); ///
-        System.out.println(query); ///
         return programRepository.findByProgramTitleContains(query,pageRequest);
     }
 
-@Operation(summary = "운동 프로그램 리뷰 작성", security = { @SecurityRequirement(name = "bearer-key") })
-//    프로그램 리뷰 달기
-@Auth
-@PostMapping("/comments")
-public ResponseEntity addComments(
+    @Operation(summary = "운동 프로그램 리뷰 작성", security = { @SecurityRequirement(name = "bearer-key") })
+    @Auth
+    @PostMapping("/comments")
+    public ResponseEntity addComments(
         @RequestParam long id,
         @RequestBody ProgramComment programComment,
         @RequestAttribute AuthProfile authProfile) {
-
     Optional<Program> matchprogram = programRepository.findById(id);
     if(!matchprogram.isPresent()) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
-    // 커멘트 추가
     programComment.setUserId(authProfile.getId());
     programComment.setUserSex(authProfile.getSex());
     programComment.setUserName(authProfile.getName());
     programComment.setUserAge(authProfile.getAge());
     programComment.getContent();
-    programComment.setProgram(matchprogram.get()); //  댓글 데이터베이스에 URL엔드포인트 파라미터로 받은 id 찾아서 할당
+    programComment.setProgram(matchprogram.get());
 
-    // 트랜잭션 처리 x = 데이터베이스에 저장 태랜잭션은 나중에
     service.createComment(programComment);
 
     Map<String,Object> res = new HashMap<>();
@@ -161,19 +145,13 @@ public ResponseEntity addComments(
     return ResponseEntity.status(HttpStatus.CREATED).body(res);
 }
 
-// 프로그램 리뷰 띄우기
-@Operation(summary = "운동 프로그램 댓글 띄우기")
-@GetMapping ("/getComment")
+    @Operation(summary = "운동 프로그램 댓글 띄우기")
+    @GetMapping ("/getComment")
     public ResponseEntity<List<ProgramComment>> getComment (@RequestParam long id) {
-//        id로 일치하는 program 찾고
         Optional<Program> program = programRepository.findById(id);
-// 찾은 프로그램에서 comment데이터베이스에서 다시 일치하는 애 찾고
-
         List<ProgramComment> programComments =   programCommentRepository.findByProgram(program);
-//        찾은애를 이제 리스트로 배출
         return ResponseEntity.status(HttpStatus.OK).body(programComments);
     }
-
 
     @Operation(summary = "내가 작성한 운동 프로그램 리뷰", security = { @SecurityRequirement(name = "bearer-key") })
     @Auth
@@ -190,34 +168,21 @@ public ResponseEntity addComments(
             @RequestAttribute AuthProfile authProfile,
             @RequestBody Program program
     ) {
-        System.out.println(program + "프로그램 이름 출력-------------------");
-        // 토큰 낚아챈 authProfile의 id 할당
         long userId = authProfile.getId();
-
-        // 선택한 프로그램 정보
         String newProgramTitle = program.getProgramTitle();
-
-        Optional<User> user = repo.findById(userId);
-
+        Optional<User> user = userRepository.findById(userId);
         if (user.isPresent()) {
             User findUser = user.get();
             Optional<Program> modifyProgram = programRepository.findByProgramTitle(newProgramTitle);
-
             if (modifyProgram.isPresent()) {
                 findUser.setProgramName(newProgramTitle);
-                repo.save(findUser);
-
+                userRepository.save(findUser);
                 return ResponseEntity.status(HttpStatus.OK).build();
             } else {
-                // 선택한 프로그램이 없을 경우 404 반환
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         } else {
-            // 유저가 없을 경우 404 반환
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
     }
-
-
-

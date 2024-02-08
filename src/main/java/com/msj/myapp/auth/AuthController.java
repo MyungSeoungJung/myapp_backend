@@ -28,38 +28,34 @@ import java.util.Optional;
 public class AuthController {
 
     @Autowired
-    private UserRepository repo;
+    private UserRepository userRepository;
 
     @Autowired
     private ProgramRepository programRepository;
 
     @Autowired
-    private AuthService service;
+    private AuthService authService;
     @Autowired
     private Hash hash;
 
     @Autowired
-    private JWT myAppJwt;
+    private JWT jwt;
 
 
     @Operation(summary = "회원가입")
     @PostMapping (value = "/signup")
     public ResponseEntity signup (@RequestBody SignupRequest req){
-        System.out.println(req);
-        long userId = service.createIdentity(req);
-
+        long userId = authService.createIdentity(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(userId);
     }
+
     @Operation(summary = "로그인")
     @PostMapping (value = "/signin")        //@RequestParam = 쿼리값을 받을때 사용 ex: input값 노션 에러/궁금증목록에 정리
     public ResponseEntity signIn (@RequestParam String phone,
                                   @RequestParam String password,
                                   HttpServletResponse res){
 
-        Optional<User> findUser = repo.findByPhone(phone);  //휴대폰 번호로 일치하는 유저 객체 찾기
-
-        System.out.println(phone);
-        System.out.println(password);
+        Optional<User> findUser = userRepository.findByPhone(phone);  //휴대폰 번호로 일치하는 유저 객체 찾기
 
         if (!findUser.isPresent()){  //유저 없으면
             // 유저 못 찾으면 401 에러
@@ -80,14 +76,14 @@ public class AuthController {
 
 
 //      토큰생성
-        String token = myAppJwt.createToken(
+        String token = jwt.createToken(
                 user.getId());
         System.out.println("토큰" + token);
 
         Cookie cookie = new Cookie("token", token);
         cookie.setPath("/");
-        cookie.setMaxAge((int) (myAppJwt.TOKEN_TIMEOUT / 1000L)); // 만료시간
-        cookie.setDomain("localhost"); // 쿠키를 사용할 수 있 도메인
+        cookie.setMaxAge((int) (jwt.TOKEN_TIMEOUT / 1000L)); // 만료시간
+        cookie.setDomain("localhost"); // 쿠키를 사용할 수 있는 도메인
 
         // 응답헤더에 쿠키 추가
         res.addCookie(cookie);
@@ -96,7 +92,7 @@ public class AuthController {
         return ResponseEntity
                 .status(HttpStatus.FOUND)
                 .location(ServletUriComponentsBuilder
-                        .fromHttpUrl("http://localhost:5500/main_page/main.html")   //리다이렉트
+                        .fromHttpUrl("http://localhost:5500/main_page/main.html")  //리다이렉트
                         .build().toUri())
                 .build();
 
@@ -104,19 +100,17 @@ public class AuthController {
 
     @Operation(summary = "메인페이지 유저 이름 띄우기", security = { @SecurityRequirement(name = "bearer-key") })
     @Auth
-    @GetMapping (value = "/displayUserNameOnMainPage")
+    @GetMapping (value = "/displayUserName")
     public ResponseEntity<Map<String,Object>> mainPage (@RequestAttribute AuthProfile authProfile){
         Map<String, Object> response = new HashMap<>();
-        Optional<User> UserOptional = repo.findById(authProfile.getId());
+        Optional<User> UserOptional = userRepository.findById(authProfile.getId());
         if(UserOptional.isPresent()){
         User user = UserOptional.get();
         response.put("name",user.getName());
         }else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-
 
 }

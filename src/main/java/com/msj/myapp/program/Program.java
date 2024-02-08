@@ -7,8 +7,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -16,15 +19,13 @@ import java.util.List;
 @Builder
 @Entity
 public class Program {
-//    키,몸무게,운동목적 같은 신체사항은 profile에 저장
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;  //Id는 고유한 값이라 정수여야만 함
+    private long id;
 
     private String rate;    //별점
     private String programLevel;   //프로그램이 초급자용인지 고급자용인지
-    private String programGoal;  //다이어트 프로그램인지
+    private String programGoal;  //프로그램 목적
 
     @Column(columnDefinition = "LONGTEXT")
     private String img;
@@ -55,5 +56,17 @@ public class Program {
                 ", coachName='" + coachName + '\'' +
 
                 '}';
+    }
+
+    public Map<String,Object> createProgramResponse (Program program){
+        Map<String, Object> res = new HashMap<>();
+        res.put("programTitle",program.getProgramTitle());
+        res.put("programGoal",program.getProgramGoal());
+        res.put("programLevel",program.getProgramLevel());
+        res.put("programIntro",program.getProgramIntro());
+        res.put("programImg",program.getImg());
+        res.put("programRate",program.getRate());
+        res.put("coachName",program.getCoachName());
+        return res;
     }
 }

@@ -15,21 +15,20 @@ import java.util.Optional;
 
 @Service
 public class AuthService {
-    private ProgramRepository programRepo;
-    private UserRepository repo;
+    private  ProgramRepository programRepo;
+    private UserRepository userRepository;
     @Autowired
     Hash hash;
 
     @Autowired
-    public AuthService(UserRepository repo, ProgramRepository programRepo){
-        this.repo = repo;
+    public AuthService(UserRepository userRepo, ProgramRepository programRepo){
+        this.userRepository = userRepo;
         this.programRepo = programRepo;
     }
 
     @Transactional
 //  회원가입
     public long createIdentity(SignupRequest req){
-        System.out.println("create아이덴티티" + req);
         User toSaveUser = User.builder()
                 .name(req.getName())
                 .sex(req.getSex())
@@ -44,14 +43,13 @@ public class AuthService {
                 .secret(hash.createHash(req.getPassword()))
                 .programName(req.getProgramTitle())
                 .build();
-        System.out.println(req);
-        User savedUser = repo.save(toSaveUser);
+        User savedUser = userRepository.save(toSaveUser);
 
 
         Optional<Program> program = programRepo.findByProgramTitle(req.getProgramTitle());
         if (program.isPresent()) {
             savedUser.setProgram(program.get()); // 프로그램을 유저에 연결
-            repo.save(savedUser);
+            userRepository.save(savedUser);
         }
 
         return savedUser.getId();

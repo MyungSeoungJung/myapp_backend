@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
 @Component
 public class Authinterceptor implements HandlerInterceptor {
     @Autowired
-    JWT myAppJwt;
+    JWT jwt;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -50,7 +50,7 @@ public class Authinterceptor implements HandlerInterceptor {
             // 3. 인증토큰 검증 및 페이로드(subject/claim) 객체화하기
             // 메시지 개념에서 서로 주고받는 데이터를 페이로드(payload)
             AuthProfile profile =
-                    myAppJwt.validateToken(token.replace("Bearer ", ""));
+                    jwt.validateToken(token.replace("Bearer ", ""));
             if(profile == null) {
                 // 401: Unauthorized
                 // 인증토큰이 잘못 됨(시그니처, 페이로드, 알고리즘..)
