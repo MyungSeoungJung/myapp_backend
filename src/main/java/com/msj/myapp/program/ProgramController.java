@@ -40,7 +40,8 @@ public class ProgramController {
     @Auth
     @GetMapping(value = "/myExercise")
     public ResponseEntity<Map<String,Object>> myExercise (@RequestAttribute AuthProfile authProfile){
-    Optional<Program> matchProgram = programRepository.findByProgramTitle(authProfile.getExerciseProgramName());
+    Optional<User> user = userRepository.findById(authProfile.getId());
+    Optional<Program> matchProgram = programRepository.findByProgramTitle(user.get().getProgramName());
 
      if (matchProgram.isPresent()){
         Map<String,Object> res = program.createProgramResponse(matchProgram.get());
@@ -48,23 +49,23 @@ public class ProgramController {
      }else {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
     }
+
 
     @Operation(summary = "추천 운동 프로그램 띄우기")
     @GetMapping (value = "/recommendProgram")
     public ResponseEntity<List<Program>> recommendProgram (@RequestParam String goal) {
-        System.out.println("check" + goal);
         List<Program> programs = programRepository.findByProgramGoal(goal);
         return ResponseEntity.status(HttpStatus.OK).body(programs);
     }
 
     @Operation(summary = "운동 프로그램 띄우기")
     @GetMapping (value = "/bestProgram")
-    public ResponseEntity<List<Program>> recommendProgram () {
+    public ResponseEntity<List<Program>> bestProgram () {
         List<Program> programs = programRepository.findAll(Sort.by("id").ascending());
         return ResponseEntity.status(HttpStatus.OK).body(programs);
     }
+
     @Operation(summary = "각각의 운동 프로그램 페이지")
     @GetMapping (value = "/detailProgram")
     public ResponseEntity<Map<String,Object>> detailProgram (@RequestParam long id) {
@@ -86,12 +87,6 @@ public class ProgramController {
         res.put("data",savedProgram);
         res.put("message","created");
         return ResponseEntity.status(HttpStatus.OK).body(res);
-    }
-
-    @Operation(summary = "운동 프로그램 선택")
-    @GetMapping ("/choiceProgram")
-    public ResponseEntity<List<Program>> choiceProgram(){
-        return null;
     }
 
     @Operation(summary = "운동 프로그램 띄우기")
@@ -124,18 +119,17 @@ public class ProgramController {
         @RequestBody ProgramComment programComment,
         @RequestAttribute AuthProfile authProfile) {
     Optional<Program> matchprogram = programRepository.findById(id);
+    Optional<User> user = userRepository.findById(authProfile.getId());
     if(!matchprogram.isPresent()) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
     programComment.setUserId(authProfile.getId());
-    programComment.setUserSex(authProfile.getSex());
-    programComment.setUserName(authProfile.getName());
-    programComment.setUserAge(authProfile.getAge());
+    programComment.setUserSex(user.get().getSex());
+    programComment.setUserName(user.get().getName());
+    programComment.setUserAge(user.get().getAge());
     programComment.getContent();
     programComment.setProgram(matchprogram.get());
-
     service.createComment(programComment);
-
     Map<String,Object> res = new HashMap<>();
     res.put("userId",programComment.getUserId());
     res.put("content",programComment.getContent());
@@ -185,4 +179,6 @@ public class ProgramController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+
     }

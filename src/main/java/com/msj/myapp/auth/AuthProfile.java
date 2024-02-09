@@ -13,14 +13,14 @@ import java.security.PrivateKey;
 @NoArgsConstructor
 public class AuthProfile {
 private long id;
-private String name;
-private String sex;
-private int weight;
-private int height;
-private int age;
-private double amountOfActivity;
-private int targetCalories;
-private String exerciseProgramName;
-private String levelOfExercise;
-private String purposeOfExercise;
+//private String name;
+//private String sex;
+//private int weight;
+//private int height;
+//private int age;
+//private double amountOfActivity;
+//private int targetCalories;
+//private String exerciseProgramName;
+//private String levelOfExercise;
+//private String purposeOfExercise;
 }

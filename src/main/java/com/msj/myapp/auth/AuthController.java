@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Optional;
 @Tag(name = "유저 관리 처리")
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired
@@ -54,9 +54,7 @@ public class AuthController {
     public ResponseEntity signIn (@RequestParam String phone,
                                   @RequestParam String password,
                                   HttpServletResponse res){
-
         Optional<User> findUser = userRepository.findByPhone(phone);  //휴대폰 번호로 일치하는 유저 객체 찾기
-
         if (!findUser.isPresent()){  //유저 없으면
             // 유저 못 찾으면 401 에러
             Map<String, String> errorResponse = new HashMap<>();
@@ -70,7 +68,6 @@ public class AuthController {
         if(!isVerified) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
         User user = findUser.get();
         System.out.println("유저" + user);
 
@@ -96,21 +93,6 @@ public class AuthController {
                         .build().toUri())
                 .build();
 
-    }
-
-    @Operation(summary = "메인페이지 유저 이름 띄우기", security = { @SecurityRequirement(name = "bearer-key") })
-    @Auth
-    @GetMapping (value = "/displayUserName")
-    public ResponseEntity<Map<String,Object>> mainPage (@RequestAttribute AuthProfile authProfile){
-        Map<String, Object> response = new HashMap<>();
-        Optional<User> UserOptional = userRepository.findById(authProfile.getId());
-        if(UserOptional.isPresent()){
-        User user = UserOptional.get();
-        response.put("name",user.getName());
-        }else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }

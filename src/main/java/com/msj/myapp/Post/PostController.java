@@ -4,6 +4,8 @@ import com.msj.myapp.Post.entity.Post;
 import com.msj.myapp.Post.request.PostModifyRequest;
 import com.msj.myapp.auth.Auth;
 import com.msj.myapp.auth.AuthProfile;
+import com.msj.myapp.user.User;
+import com.msj.myapp.user.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,46 +22,31 @@ import java.util.*;
 @RequestMapping(value = "/posts")
 public class PostController {
     @Autowired
-    PostRepository repo;
-
+    PostRepository postRepository;
+    @Autowired
+    UserRepository userRepository;
     @Operation(summary = "게시물 띄우기")
     @GetMapping(value = "/getPost")
     public List<Post> getPostList() {
-        List<Post> list = repo.findAll(Sort.by("no").ascending());
+        List<Post> list = postRepository.findAll(Sort.by("no").ascending());
         return list;
     }
 
     @Operation(summary = "게시물 작성", security = { @SecurityRequirement(name = "bearer-key") })
     @Auth
     @PostMapping (value = "/addPost")
-    public ResponseEntity<Map<String, Object>> addPost(@RequestBody Post post, @RequestAttribute AuthProfile authProfile) {
-        System.out.println(post);
-        System.out.println(authProfile);
-
+    public ResponseEntity<String>addPost(@RequestBody Post post, @RequestAttribute AuthProfile authProfile) {
         if (post.getTitle() == null || post.getContent() == null || post.getTitle().isEmpty() || post.getContent().isEmpty()) {
-//            Map<String, Object> result = ;
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.badRequest().body("Title and content are required.");
         }
-
-
-        post.setUserName(authProfile.getName());
-        post.setCreatedTime(new Date().getTime());
-
-        post.setCreatorId(authProfile.getId());  //유저id들어감
-        Post savedPost = repo.save(post);
-
-
-        //생성된 객체가 존재하면 null값이 아닐 때
-        if (savedPost != null) {
-            Map<String, Object> res = new HashMap<>();
-            res.put("data", savedPost);
-            res.put("message", "created");
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(res);
+        Optional<User> user = userRepository.findById(authProfile.getId());
+        if(user.isPresent()){
+            post.setUserName(user.get().getName());
+            post.setCreatedTime(new Date().getTime());
+            post.setCreatorId(user.get().getId());
+            postRepository.save(post);
         }
-
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 
@@ -67,7 +54,7 @@ public class PostController {
     @Auth
     @GetMapping (value = "/myPost")
     public List<Post> getPostList( @RequestAttribute AuthProfile authProfile) {
-        List<Post> list = repo.findByCreatorId(authProfile.getId());
+        List<Post> list = postRepository.findByCreatorId(authProfile.getId());
         return list;
     }
 
@@ -75,19 +62,14 @@ public class PostController {
     @Auth
     @DeleteMapping(value = "/deletePost")
     public ResponseEntity removePost(@RequestParam long no, @RequestAttribute AuthProfile authProfile) {
-        System.out.println(no);
-
-        Optional<Post> post = repo.findByNo(no);
-
-
+        Optional<Post> post = postRepository.findByNo(no);
         if (!post.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
         if (post.get().getNo() != no) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        repo.deleteById(no);
+        postRepository.deleteById(no);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -95,27 +77,18 @@ public class PostController {
     @Auth
     @PutMapping(value = "/modifyPost")
     public ResponseEntity modifyPost(@RequestParam long no, @RequestBody PostModifyRequest post, @RequestAttribute AuthProfile authProfile) {
-        System.out.println(no);
-        System.out.println(post);
-
-        Optional<Post> findedPost = repo.findById(no);
+        Optional<Post> findedPost = postRepository.findById(no);
         if (!findedPost.isPresent()) {
-
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        //위에서 있으면 수정 후 저장
         Post toModifyPost = findedPost.get();
-
         if (post.getTitle() != null && !post.getTitle().isEmpty()) {
             toModifyPost.setTitle(post.getTitle());
         }
         if (post.getContent() != null && !post.getContent().isEmpty()) {
             toModifyPost.setContent(post.getContent());
         }
-        //새로 덮어쓰기
-        repo.save(toModifyPost);
-
-        //ok 처리
+        postRepository.save(toModifyPost);
         return ResponseEntity.ok().build();
     }
 }

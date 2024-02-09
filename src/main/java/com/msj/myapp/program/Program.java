@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.Map;
 @AllArgsConstructor
 @Builder
 @Entity
+@Component
 public class Program {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

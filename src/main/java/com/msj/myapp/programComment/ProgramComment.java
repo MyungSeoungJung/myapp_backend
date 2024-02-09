@@ -12,11 +12,8 @@ public class ProgramComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-
     @ManyToOne
     private Program program;
-
     private long userId;
     private String content;
     private String userName;

@@ -11,15 +11,9 @@ import java.util.Optional;
 @Primary
 public interface ProgramRepository extends JpaRepository<Program,Long> {
     Optional<Program> findByProgramTitle(String programTitle);
-
     List<Program> findByProgramGoal(String programGoal);
-
-
     Page<Program> findByProgramTitleContains(String programTitle, Pageable pageable);
-
-
     @Override
     Optional<Program> findById(Long aLong);
-
 
 }

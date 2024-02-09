@@ -2,23 +2,24 @@ package com.msj.myapp.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.msj.myapp.Post.entity.Post;
+import com.msj.myapp.auth.AuthProfile;
 import com.msj.myapp.program.Program;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-//User필드 그대로 데이터베이스에 table이 생김
 public class User {
-    //   이름,성별,나이 같은 인적사항 user에 저장
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -29,10 +30,10 @@ public class User {
     private int height;
     private int weight;
     private String sex;
-    private String userChoiceLevel;   //초급자 중급자 //상급자
+    private String userChoiceLevel;
     private Double activity; //활동량
-    private String userChoiceGoal;    //다이어트 //근비대
-    private int goalCal; //목표 칼로리 주 0.25감량 0.5감량 등
+    private String userChoiceGoal;
+    private int goalCal;
     @Column(length = 500)
     private String secret;
     private String programName;
@@ -73,4 +74,6 @@ public class User {
                 ", goalCal=" + goalCal +
                 '}';
     }
+
+
 }

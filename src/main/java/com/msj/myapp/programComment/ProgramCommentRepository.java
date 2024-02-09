@@ -10,8 +10,5 @@ import java.util.Optional;
 @Repository
 public interface ProgramCommentRepository  extends JpaRepository<ProgramComment, Long> {
     List<ProgramComment> findByProgram(Optional<Program> program);
-
     List<ProgramComment> findByUserId(long userId);
-
-
 }
