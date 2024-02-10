@@ -42,7 +42,6 @@ public class ProgramController {
     public ResponseEntity<Map<String,Object>> myExercise (@RequestAttribute AuthProfile authProfile){
     Optional<User> user = userRepository.findById(authProfile.getId());
     Optional<Program> matchProgram = programRepository.findByProgramTitle(user.get().getProgramName());
-
      if (matchProgram.isPresent()){
         Map<String,Object> res = program.createProgramResponse(matchProgram.get());
         return ResponseEntity.status(HttpStatus.OK).body(res);
@@ -50,7 +49,6 @@ public class ProgramController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     }
-
 
     @Operation(summary = "추천 운동 프로그램 띄우기")
     @GetMapping (value = "/recommendProgram")
@@ -81,14 +79,12 @@ public class ProgramController {
     @Operation(summary = "운동 프로그램 추가하기")
     @PostMapping ("/addProgram")
     public ResponseEntity addProgram(@RequestBody Program program){
-        System.out.println(program);
         Program savedProgram =  programRepository.save(program);
         Map<String,Object> res = new HashMap<>();
         res.put("data",savedProgram);
         res.put("message","created");
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
-
     @Operation(summary = "운동 프로그램 띄우기")
     @GetMapping(value = "/getProgram")
     public ResponseEntity<List<Program>> getProgram() {
@@ -143,7 +139,7 @@ public class ProgramController {
     @GetMapping ("/getComment")
     public ResponseEntity<List<ProgramComment>> getComment (@RequestParam long id) {
         Optional<Program> program = programRepository.findById(id);
-        List<ProgramComment> programComments =   programCommentRepository.findByProgram(program);
+        List<ProgramComment> programComments = programCommentRepository.findByProgram(program);
         return ResponseEntity.status(HttpStatus.OK).body(programComments);
     }
 
@@ -179,6 +175,4 @@ public class ProgramController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-
-
     }
