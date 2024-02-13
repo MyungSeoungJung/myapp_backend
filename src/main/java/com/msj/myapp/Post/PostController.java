@@ -36,7 +36,7 @@ public class PostController {
     @Auth
     @PostMapping (value = "/addPost")
     public ResponseEntity<String>addPost(@RequestBody Post post, @RequestAttribute AuthProfile authProfile) {
-        if (post.getTitle() == null || post.getContent() == null || post.getTitle().isEmpty() || post.getContent().isEmpty()) {
+        if (post.getTitle() == null || post.getContent() == null || post.getTitle().isEmpty() || post.getContent().isEmpty()) { // 요청 보내는 게시물 내용 체크
             return ResponseEntity.badRequest().body("Title and content are required.");
         }
         Optional<User> user = userRepository.findById(authProfile.getId());

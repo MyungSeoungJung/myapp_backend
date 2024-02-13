@@ -35,12 +35,14 @@ public class ProgramController {
     ProgramCommentRepository programCommentRepository;
     @Autowired
     ProgramService service;
+    @Autowired
+    ProgramComment programComment;
 
     @Operation(summary = "내가 선택한 운동 프로그램", security = { @SecurityRequirement(name = "bearer-key") })
     @Auth
     @GetMapping(value = "/myExercise")
     public ResponseEntity<Map<String,Object>> myExercise (@RequestAttribute AuthProfile authProfile){
-    Optional<User> user = userRepository.findById(authProfile.getId());
+    Optional<User> user = userRepository.findById(authProfile.getId());  // 유저 id 매칭
     Optional<Program> matchProgram = programRepository.findByProgramTitle(user.get().getProgramName());
      if (matchProgram.isPresent()){
         Map<String,Object> res = program.createProgramResponse(matchProgram.get());
@@ -98,6 +100,7 @@ public class ProgramController {
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         return programRepository.findAll(pageRequest);
     }
+
     @Operation(summary = "운동 프로그램 검색")
     //No가 포함된 목록 조회
     @GetMapping(value = "/paging/search")
@@ -110,30 +113,21 @@ public class ProgramController {
     @Operation(summary = "운동 프로그램 리뷰 작성", security = { @SecurityRequirement(name = "bearer-key") })
     @Auth
     @PostMapping("/comments")
-    public ResponseEntity addComments(
-        @RequestParam long id,
-        @RequestBody ProgramComment programComment,
-        @RequestAttribute AuthProfile authProfile) {
-    Optional<Program> matchprogram = programRepository.findById(id);
+    public ResponseEntity addComments(@RequestParam long id,
+                                      @RequestBody ProgramComment programComment,
+                                      @RequestAttribute AuthProfile authProfile) {
+        
+    Optional<Program> matchProgram = programRepository.findById(id);
     Optional<User> user = userRepository.findById(authProfile.getId());
-    if(!matchprogram.isPresent()) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    }
-    programComment.setUserId(authProfile.getId());
-    programComment.setUserSex(user.get().getSex());
-    programComment.setUserName(user.get().getName());
-    programComment.setUserAge(user.get().getAge());
-    programComment.getContent();
-    programComment.setProgram(matchprogram.get());
-    service.createComment(programComment);
-    Map<String,Object> res = new HashMap<>();
-    res.put("userId",programComment.getUserId());
-    res.put("content",programComment.getContent());
-    res.put("userName",programComment.getUserName());
-    res.put("userSex",programComment.getUserSex());
-    res.put("userAge",programComment.getUserAge());
+        if (matchProgram.isEmpty() || user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    ProgramComment newComment = programComment.createProgramComment(programComment, matchProgram.get(), user.get()); // 댓글 생성
+    service.createComment(newComment);  // 서비스 로직
+    Map<String, Object> res = programComment.createCommentResponse(newComment); // 댓글 생성 응답 반환
     return ResponseEntity.status(HttpStatus.CREATED).body(res);
-}
+    }
+
 
     @Operation(summary = "운동 프로그램 댓글 띄우기")
     @GetMapping ("/getComment")

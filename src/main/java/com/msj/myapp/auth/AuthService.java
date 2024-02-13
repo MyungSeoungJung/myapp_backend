@@ -28,7 +28,7 @@ public class AuthService {
 
     @Transactional
 //  회원가입
-    public long createIdentity(SignupRequest req){
+    public long createIdentity(SignupRequest req){  //회원 가입 서비스 로직
         User toSaveUser = User.builder()
                 .name(req.getName())
                 .sex(req.getSex())

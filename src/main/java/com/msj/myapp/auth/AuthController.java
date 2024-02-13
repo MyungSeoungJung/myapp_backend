@@ -50,7 +50,7 @@ public class AuthController {
     }
 
     @Operation(summary = "로그인")
-    @PostMapping (value = "/signin")        //@RequestParam = 쿼리값을 받을때 사용 ex: input값 노션 에러/궁금증목록에 정리
+    @PostMapping (value = "/signin")
     public ResponseEntity signIn (@RequestParam String phone,
                                   @RequestParam String password,
                                   HttpServletResponse res){

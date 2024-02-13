@@ -60,7 +60,7 @@ public class Program {
                 '}';
     }
 
-    public Map<String,Object> createProgramResponse (Program program){
+    public Map<String,Object> createProgramResponse (Program program){  //운동 프로그램 응답 모듈화
         Map<String, Object> res = new HashMap<>();
         res.put("programTitle",program.getProgramTitle());
         res.put("programGoal",program.getProgramGoal());
