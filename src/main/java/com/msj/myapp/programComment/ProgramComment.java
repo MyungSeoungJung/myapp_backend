@@ -5,11 +5,13 @@ import com.msj.myapp.user.User;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Entity
+@Component
 @Data
 @NoArgsConstructor
 public class ProgramComment {

@@ -93,18 +93,31 @@ public class ProgramController {
         List<Program> program = programRepository.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(program);
     }
-    @Operation(summary = "운동 프로그램 페이징")
+       @Operation(summary = "운동 프로그램 페이징")
     @GetMapping(value = "/paging")
     public Page<Program> getPostsPaging(@RequestParam int page, @RequestParam int size) {
         Sort sort = Sort.by("id").descending();
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         return programRepository.findAll(pageRequest);
     }
+    @Operation(summary = "운동 프로그램 페이징")
+    @GetMapping(value = "/programStatePaging")
+    public Page<Program> getPostsPaging(@RequestParam int page, @RequestParam int size,@RequestParam String state) {
+        Sort sort = Sort.by("id").descending();
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        return programRepository.findByProgramGoalContains(state, pageRequest);
+    }
+    @GetMapping("/getProgramGoal")
+    public Page<Program> getMuscleBuildProgram(@RequestParam int page, int size, String state){ // KISS원칙 한 메서드는 하나의 결과만 반환
+        Sort sort = Sort.by("id").descending();
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return programRepository.findPageByProgramGoal(state, pageRequest);
+    }
 
     @Operation(summary = "운동 프로그램 검색")
     //No가 포함된 목록 조회
     @GetMapping(value = "/paging/search")
-    public Page<Program> getPostPagingSearch(@RequestParam int page,@RequestParam int size,String query){
+    public Page<Program> getPostPagingSearch(@RequestParam int page,@RequestParam int size,@RequestParam String query){
         Sort sort = Sort.by("id").descending();
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         return programRepository.findByProgramTitleContains(query,pageRequest);
@@ -119,12 +132,14 @@ public class ProgramController {
         
     Optional<Program> matchProgram = programRepository.findById(id);
     Optional<User> user = userRepository.findById(authProfile.getId());
-        if (matchProgram.isEmpty() || user.isEmpty()) {
+
+    if (matchProgram.isEmpty() || user.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     ProgramComment newComment = programComment.createProgramComment(programComment, matchProgram.get(), user.get()); // 댓글 생성
     service.createComment(newComment);  // 서비스 로직
     Map<String, Object> res = programComment.createCommentResponse(newComment); // 댓글 생성 응답 반환
+
     return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
 
@@ -169,4 +184,5 @@ public class ProgramController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-    }
+
+    } // end
