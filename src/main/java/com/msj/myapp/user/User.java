@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -45,7 +46,8 @@ public class User {
     private Program program;
 
 //    포스트
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
+    @BatchSize(size = 10)
     private List<Post> post;
     @Override
     public String toString() {

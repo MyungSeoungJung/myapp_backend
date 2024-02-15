@@ -59,10 +59,10 @@ public class ProgramController {
         return ResponseEntity.status(HttpStatus.OK).body(programs);
     }
 
-    @Operation(summary = "운동 프로그램 띄우기")
-    @GetMapping (value = "/bestProgram")
-    public ResponseEntity<List<Program>> bestProgram () {
-        List<Program> programs = programRepository.findAll(Sort.by("id").ascending());
+    @Operation(summary = "top 4 운동 프로그램")
+    @GetMapping (value = "/top4Program")
+    public ResponseEntity<List<Program>> top4Program () {
+        List<Program> programs = programRepository.findAllProgram();
         return ResponseEntity.status(HttpStatus.OK).body(programs);
     }
 
@@ -77,7 +77,6 @@ public class ProgramController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-
     @Operation(summary = "운동 프로그램 추가하기")
     @PostMapping ("/addProgram")
     public ResponseEntity addProgram(@RequestBody Program program){
@@ -87,16 +86,10 @@ public class ProgramController {
         res.put("message","created");
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
-    @Operation(summary = "운동 프로그램 띄우기")
-    @GetMapping(value = "/getProgram")
-    public ResponseEntity<List<Program>> getProgram() {
-        List<Program> program = programRepository.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(program);
-    }
-       @Operation(summary = "운동 프로그램 페이징")
+    @Operation(summary = "운동 프로그램 페이징")
     @GetMapping(value = "/paging")
-    public Page<Program> getPostsPaging(@RequestParam int page, @RequestParam int size) {
-        Sort sort = Sort.by("id").descending();
+    public Page<Program> getProgramPaging(@RequestParam int page, @RequestParam int size) {
+        Sort sort = Sort.by("id").ascending();
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         return programRepository.findAll(pageRequest);
     }
