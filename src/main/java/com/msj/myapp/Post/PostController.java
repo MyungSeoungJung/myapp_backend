@@ -91,4 +91,20 @@ public class PostController {
         postRepository.save(toModifyPost);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping(value = "/postDetailPage")
+    public ResponseEntity<Map<String,Object>> postDetailPage (@RequestParam int id){
+        Optional<Post> post = postRepository.findByNo(id);
+        Map<String, Object> res = new HashMap<>();
+        if (post.isPresent()){
+            res.put("no",post.get().getNo());
+            res.put("title",post.get().getTitle());
+            res.put("content", post.get().getContent());
+            res.put("userName", post.get().getUserName());
+            res.put("createTime", post.get().getCreatedTime());
+        }else {
+            ResponseEntity.status(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(res);
+    }
 }

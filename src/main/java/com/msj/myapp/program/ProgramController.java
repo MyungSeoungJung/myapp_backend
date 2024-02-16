@@ -61,7 +61,7 @@ public class ProgramController {
 
     @Operation(summary = "top 4 운동 프로그램")
     @GetMapping (value = "/top4Program")
-    public ResponseEntity<List<Program>> top4Program () {
+    public ResponseEntity<List<Program>> bestProgram () {
         List<Program> programs = programRepository.findAllProgram();
         return ResponseEntity.status(HttpStatus.OK).body(programs);
     }
