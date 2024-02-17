@@ -87,26 +87,34 @@ public class ProgramController {
         return ResponseEntity.status(HttpStatus.OK).body(res);
     }
     @Operation(summary = "운동 프로그램 페이징")
-    @GetMapping(value = "/paging")
-    public Page<Program> getProgramPaging(@RequestParam int page, @RequestParam int size) {
-        Sort sort = Sort.by("id").ascending();
-        PageRequest pageRequest = PageRequest.of(page, size, sort);
-        return programRepository.findAll(pageRequest);
-    }
-    @Operation(summary = "운동 프로그램 페이징")
     @GetMapping(value = "/programStatePaging")
     public Page<Program> getPostsPaging(@RequestParam int page, @RequestParam int size,@RequestParam String state) {
         Sort sort = Sort.by("id").descending();
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         return programRepository.findByProgramGoalContains(state, pageRequest);
     }
-    @GetMapping("/getProgramGoal")
-    public Page<Program> getMuscleBuildProgram(@RequestParam int page, int size, String state){ // KISS원칙 한 메서드는 하나의 결과만 반환
+    @Operation(summary = "운동 프로그램 페이징")
+    @GetMapping(value = "/paging")   //전체
+    public Page<Program> getProgramPaging(@RequestParam int page, @RequestParam int size) {
+        Sort sort = Sort.by("id").ascending();
+        System.out.println("전체--------------------");
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+        return programRepository.findAllProgramPaging(pageRequest);
+    }
+    @GetMapping("/getMuscleBuild")  // 근육증가 필터링 버튼
+    public Page<Program> getMuscleBuildProgram(@RequestParam int page, int size, String state){
+        System.out.println("getMuscleBuild--------------------");
         Sort sort = Sort.by("id").descending();
         PageRequest pageRequest = PageRequest.of(page, size);
-        return programRepository.findPageByProgramGoal(state, pageRequest);
+        return programRepository.findByMuscleBuild(state, pageRequest);
     }
-
+    @GetMapping("/getDiet")  // 다이어트 필터링 버튼
+    public Page<Program> getDietProgram(@RequestParam int page, int size, String state){
+        Sort sort = Sort.by("id").descending();
+        System.out.println("getDiet--------------------");
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return programRepository.findByDietExercise(state, pageRequest);
+    }
     @Operation(summary = "운동 프로그램 검색")
     //No가 포함된 목록 조회
     @GetMapping(value = "/paging/search")
@@ -115,7 +123,6 @@ public class ProgramController {
         PageRequest pageRequest = PageRequest.of(page, size, sort);
         return programRepository.findByProgramTitleContains(query,pageRequest);
     }
-
     @Operation(summary = "운동 프로그램 리뷰 작성", security = { @SecurityRequirement(name = "bearer-key") })
     @Auth
     @PostMapping("/comments")
@@ -135,7 +142,6 @@ public class ProgramController {
 
     return ResponseEntity.status(HttpStatus.CREATED).body(res);
     }
-
 
     @Operation(summary = "운동 프로그램 댓글 띄우기")
     @GetMapping ("/getComment")
