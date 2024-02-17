@@ -14,24 +14,23 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UserService {
-    private ProgramRepository programRepo;
-    private UserRepository repo;
+public class AuthService {
+    private  ProgramRepository programRepo;
+    private UserRepository userRepository;
     @Autowired
     Hash hash;
 
     @Autowired
-    public UserService(UserRepository repo, ProgramRepository programRepo){
-        this.repo = repo;
+    public AuthService(UserRepository userRepo, ProgramRepository programRepo){
+        this.userRepository = userRepo;
         this.programRepo = programRepo;
     }
 
     @Transactional
-//    HTML에서 받은 양식을 고대로 가져 옴
-    public long createIdentity(SignupRequest req){
-        System.out.println("create아이덴티티" + req);
+//  회원가입
+    public long createIdentity(SignupRequest req){  //회원 가입 서비스 로직
         User toSaveUser = User.builder()
-                .name(req.getName())  //html에서 입력 받은 signupRequest 객체의 필드를 get
+                .name(req.getName())
                 .sex(req.getSex())
                 .age(req.getAge())
                 .phone(req.getPhone())
@@ -44,14 +43,13 @@ public class UserService {
                 .secret(hash.createHash(req.getPassword()))
                 .programName(req.getProgramTitle())
                 .build();
-        System.out.println(req);
-        User savedUser = repo.save(toSaveUser);
+        User savedUser = userRepository.save(toSaveUser);
 
 
         Optional<Program> program = programRepo.findByProgramTitle(req.getProgramTitle());
         if (program.isPresent()) {
             savedUser.setProgram(program.get()); // 프로그램을 유저에 연결
-            repo.save(savedUser);
+            userRepository.save(savedUser);
         }
 
         return savedUser.getId();
