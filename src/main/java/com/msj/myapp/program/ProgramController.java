@@ -103,7 +103,6 @@ public class ProgramController {
     }
     @GetMapping("/getMuscleBuild")  // 근육증가 필터링 버튼
     public Page<Program> getMuscleBuildProgram(@RequestParam int page, int size, String state){
-        System.out.println("getMuscleBuild--------------------");
         Sort sort = Sort.by("id").descending();
         PageRequest pageRequest = PageRequest.of(page, size);
         return programRepository.findByMuscleBuild(state, pageRequest);
@@ -111,7 +110,6 @@ public class ProgramController {
     @GetMapping("/getDiet")  // 다이어트 필터링 버튼
     public Page<Program> getDietProgram(@RequestParam int page, int size, String state){
         Sort sort = Sort.by("id").descending();
-        System.out.println("getDiet--------------------");
         PageRequest pageRequest = PageRequest.of(page, size);
         return programRepository.findByDietExercise(state, pageRequest);
     }
