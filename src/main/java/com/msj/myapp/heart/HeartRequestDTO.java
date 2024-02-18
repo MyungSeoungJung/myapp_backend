@@ -1,4 +1,4 @@
-package Like;
+package com.msj.myapp.heart;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data
-public class LikeRequestDTO {
+public class HeartRequestDTO {
     private Long UserId;
-    private Long postId;
+    private Long ProgramId;
 
-    public LikeRequestDTO(Long userId, Long postId){
+    public HeartRequestDTO(Long userId, Long ProgramId){
         this.UserId = userId;
-        this.postId = postId;
+        this.ProgramId = ProgramId;
     }
 }

@@ -38,6 +38,8 @@ public class Program {
 
     private String coachName;
 
+
+    private int likeCount;
 //  @JsonManagedReference는 일반적으로 다수의 관계를 가지는 엔티티에 사용
     @JsonManagedReference  // 객체를 직렬화할 때 해당 엔티티가 참조하는 다른 엔티티의 정보를 무시하고, 역참조가 발생하지 않도록 합니다.
     @OneToMany(mappedBy = "program",fetch = FetchType.LAZY)

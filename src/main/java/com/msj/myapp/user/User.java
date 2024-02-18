@@ -2,7 +2,6 @@ package com.msj.myapp.user;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.msj.myapp.Post.entity.Post;
-import com.msj.myapp.auth.AuthProfile;
 import com.msj.myapp.program.Program;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,10 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
-import java.util.Optional;
 
 @Data
 @NoArgsConstructor
