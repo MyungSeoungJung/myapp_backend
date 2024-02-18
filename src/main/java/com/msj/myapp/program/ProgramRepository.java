@@ -21,6 +21,7 @@ public interface ProgramRepository extends JpaRepository<Program,Long> {
     Page<Program> findByProgramGoalContains(String programGoal, Pageable pageable);
     @Query("select p from Program p left join fetch p.users where p.programGoal like '%근력증가%' ")
     Page<Program> findByMuscleBuild(String programGoal, Pageable pageable); // 근육 증가 필터링 메서드
+
     @Query("select p from Program p left join fetch p.users where p.programGoal like '%다이어트%' ")
     Page<Program> findByDietExercise(String programGoal, Pageable pageable); // 다이어트 필터링 메서드
 
